@@ -3,4 +3,37 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+<!--    entity beans-->
+    <bean id="player" class="org.esports.Model.Player" />
+    <bean id="game" class="org.esports.Model.Game" />
+    <bean id="team" class="org.esports.Model.Team" />
+    <bean id="tournament" class="org.esports.Model.Tournament" />
+
+<!--    reposiroty beans-->
+    <bean id="playerRepository" class="org.esports.Repository.Impl.PlayerRepositoryImpl"/>
+    <bean id="gameRepository" class="org.esports.Repository.Impl.GameRepositoryImpl"/>
+    <bean id="teamRepository" class="org.esports.Repository.Impl.TeamRepositoryImpl"/>
+    <bean id="tournamentRepository" class="org.esports.Repository.Impl.TournamentRepositoryImpl"/>
+
+<!--    service beans-->
+    <bean id="playerService" class="org.esports.Service.PlayerService">
+        <constructor-arg ref="playerRepository" />
+    </bean>
+    <bean id="gameService" class="org.esports.Service.GameService">
+        <constructor-arg ref="gameRepository" />
+    </bean>
+    <bean id="teamService" class="org.esports.Service.TeamService">
+        <constructor-arg ref="teamRepository" />
+    </bean>
+    <bean id="tournamentService" class="org.esports.Service.TournamentService">
+        <constructor-arg ref="tournamentRepository" />
+    </bean>
+
+<!--    view beans-->
+    <bean id="consoleUI" class="org.esports.View.ConsoleUI">
+        <constructor-arg ref="gameService"/>
+        <constructor-arg ref="playerService"/>
+        <constructor-arg ref="teamService"/>
+        <constructor-arg ref="tournamentService"/>
+    </bean>
 </beans>
