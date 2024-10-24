@@ -1,16 +1,33 @@
 package org.esports.Model;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.validation.constraints.Min;
+
+@Entity
+@Table(name = "players")
 public class Player {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String name;
+
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "nickname", length = 50, nullable = false)
+    private String nickname;
+
+    @Min(0)
+    @Column(name = "age")
     private int age;
 
     public Player() {
     }
 
-    public Player(int id, String name, int age) {
+    public Player(int id, String nickname, int age) {
         this.id = id;
-        this.name = name;
+        this.nickname = nickname;
         this.age = age;
     }
 
@@ -22,12 +39,12 @@ public class Player {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public int getAge() {
@@ -42,9 +59,8 @@ public class Player {
     public String toString() {
         return "Player{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", nickname='" + nickname + '\'' +
                 ", age=" + age +
                 '}';
     }
 }
-

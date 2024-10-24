@@ -1,35 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-<!--    entity beans-->
-    <bean id="player" class="org.esports.Model.Player" />
-    <bean id="game" class="org.esports.Model.Game" />
-    <bean id="team" class="org.esports.Model.Team" />
-    <bean id="tournament" class="org.esports.Model.Tournament" />
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:config.properties"/>
+    </bean>
 
-<!--    reposiroty beans-->
-    <bean id="playerRepository" class="org.esports.Repository.Impl.PlayerRepositoryImpl"/>
-    <bean id="gameRepository" class="org.esports.Repository.Impl.GameRepositoryImpl"/>
-    <bean id="teamRepository" class="org.esports.Repository.Impl.TeamRepositoryImpl"/>
-    <bean id="tournamentRepository" class="org.esports.Repository.Impl.TournamentRepositoryImpl"/>
+    <!-- H2 configuration -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.h2.Driver"/>
+        <property name="url" value="jdbc:h2:file:./data/worlds24"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+    </bean>
 
-<!--    service beans-->
+    <bean id="h2WebServer" class="org.h2.tools.Server" factory-method="createWebServer" init-method="start" destroy-method="stop">
+        <constructor-arg value="-web,-webAllowOthers,-webPort,8082"/>
+    </bean>
+
+    <!-- JPA configuration -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="org.esports.Model"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- Transaction Manager -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <!-- Enable Transaction Management -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- Entity beans -->
+    <bean id="player" class="org.esports.Model.Player"/>
+    <bean id="game" class="org.esports.Model.Game"/>
+    <bean id="team" class="org.esports.Model.Team"/>
+    <bean id="tournament" class="org.esports.Model.Tournament"/>
+
+    <!-- Repository beans -->
+    <bean id="playerRepository" class="org.esports.Repository.Impl.PlayerRepositoryImpl">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+    <bean id="gameRepository" class="org.esports.Repository.Impl.GameRepositoryImpl">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+    <bean id="teamRepository" class="org.esports.Repository.Impl.TeamRepositoryImpl">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+    <bean id="tournamentRepository" class="org.esports.Repository.Impl.TournamentRepositoryImpl">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <!-- Service beans -->
     <bean id="playerService" class="org.esports.Service.PlayerService">
-        <constructor-arg ref="playerRepository" />
+        <constructor-arg ref="playerRepository"/>
     </bean>
     <bean id="gameService" class="org.esports.Service.GameService">
-        <constructor-arg ref="gameRepository" />
+        <constructor-arg ref="gameRepository"/>
     </bean>
     <bean id="teamService" class="org.esports.Service.TeamService">
-        <constructor-arg ref="teamRepository" />
+        <constructor-arg ref="teamRepository"/>
     </bean>
     <bean id="tournamentService" class="org.esports.Service.TournamentService">
-        <constructor-arg ref="tournamentRepository" />
+        <constructor-arg ref="tournamentRepository"/>
     </bean>
 
-<!--    view beans-->
+    <!-- View beans -->
     <bean id="consoleUI" class="org.esports.View.ConsoleUI">
         <constructor-arg ref="gameService"/>
         <constructor-arg ref="playerService"/>
