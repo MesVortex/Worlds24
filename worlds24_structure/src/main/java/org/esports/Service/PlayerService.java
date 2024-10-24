@@ -2,7 +2,6 @@ package org.esports.Service;
 
 import org.esports.Model.Player;
 import org.esports.Repository.Interface.PlayerRepository;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.List;
 
