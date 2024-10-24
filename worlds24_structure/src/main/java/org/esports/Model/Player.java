@@ -18,9 +18,13 @@ public class Player {
     @Column(name = "nickname", length = 50, nullable = false)
     private String nickname;
 
-    @Min(0)
+    @Min(value = 12, message = "player must be older than 12!")
     @Column(name = "age")
     private int age;
+
+    @ManyToOne
+    @JoinColumn(name = "teamID")
+    private Team team;
 
     public Player() {
     }

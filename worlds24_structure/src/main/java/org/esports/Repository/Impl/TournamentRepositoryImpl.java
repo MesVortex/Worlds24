@@ -8,10 +8,9 @@ import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 public class TournamentRepositoryImpl implements TournamentRepository {
-    private EntityManagerFactory entityManagerFactory;
+    private final EntityManagerFactory entityManagerFactory;
 
-    // Setter for dependency injection
-    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+    public TournamentRepositoryImpl(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 
@@ -20,48 +19,54 @@ public class TournamentRepositoryImpl implements TournamentRepository {
     }
 
     @Override
-    public void addTournament(Tournament tournament) {
+    public boolean addTournament(Tournament tournament) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(tournament);
             em.getTransaction().commit();
+            return true; // Success
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            throw e;
+            return false; // Failure
         } finally {
             em.close();
         }
     }
 
     @Override
-    public void updateTournament(Tournament tournament) {
+    public boolean updateTournament(Tournament tournament) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             em.merge(tournament);
             em.getTransaction().commit();
+            return true; // Success
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            throw e;
+            return false; // Failure
         } finally {
             em.close();
         }
     }
 
     @Override
-    public void deleteTournament(Long id) {
+    public boolean deleteTournament(Long id) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             Tournament tournament = em.find(Tournament.class, id);
             if (tournament != null) {
                 em.remove(tournament);
+                em.getTransaction().commit();
+                return true; // Success
+            } else {
+                em.getTransaction().rollback();
+                return false; // Tournament not found
             }
-            em.getTransaction().commit();
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            throw e;
+            return false; // Failure
         } finally {
             em.close();
         }
@@ -86,4 +91,5 @@ public class TournamentRepositoryImpl implements TournamentRepository {
             em.close();
         }
     }
+
 }

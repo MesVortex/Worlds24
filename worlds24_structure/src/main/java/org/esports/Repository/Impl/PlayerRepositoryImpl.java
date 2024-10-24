@@ -8,10 +8,9 @@ import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 public class PlayerRepositoryImpl implements PlayerRepository {
-    private EntityManagerFactory entityManagerFactory;
+    private final EntityManagerFactory entityManagerFactory;
 
-    // Setter for dependency injection
-    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+    public PlayerRepositoryImpl(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 
@@ -20,48 +19,54 @@ public class PlayerRepositoryImpl implements PlayerRepository {
     }
 
     @Override
-    public void addPlayer(Player player) {
+    public boolean addPlayer(Player player) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(player);
             em.getTransaction().commit();
+            return true; // Success
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            throw e;
+            return false; // Failure
         } finally {
             em.close();
         }
     }
 
     @Override
-    public void updatePlayer(Player player) {
+    public boolean updatePlayer(Player player) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             em.merge(player);
             em.getTransaction().commit();
+            return true; // Success
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            throw e;
+            return false; // Failure
         } finally {
             em.close();
         }
     }
 
     @Override
-    public void deletePlayer(Long id) {
+    public boolean deletePlayer(Long id) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             Player player = em.find(Player.class, id);
             if (player != null) {
                 em.remove(player);
+                em.getTransaction().commit();
+                return true; // Success
+            } else {
+                em.getTransaction().rollback();
+                return false; // Player not found
             }
-            em.getTransaction().commit();
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            throw e;
+            return false; // Failure
         } finally {
             em.close();
         }
@@ -86,4 +91,5 @@ public class PlayerRepositoryImpl implements PlayerRepository {
             em.close();
         }
     }
+
 }

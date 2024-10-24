@@ -13,8 +13,8 @@ public class GameService {
         this.gameRepository = gameRepository;
     }
 
-    public void addGame(Game game) {
-        gameRepository.save(game);
+    public boolean addGame(Game game) {
+        return gameRepository.save(game);
     }
 
     public Game getGame(Long id) {
@@ -25,11 +25,12 @@ public class GameService {
         return gameRepository.findAll();
     }
 
-    public void updateGame(Game game) {
-        gameRepository.update(game);
+    public boolean updateGame(Game game) {
+        return gameRepository.update(game);
     }
 
-    public void removeGame(Long id) {
-        gameRepository.delete(id);
+    public boolean removeGame(Long id) {
+        return gameRepository.delete(id);
     }
+
 }

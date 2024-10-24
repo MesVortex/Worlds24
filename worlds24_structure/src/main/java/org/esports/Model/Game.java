@@ -24,7 +24,7 @@ public class Game {
     @Column(name = "average_duration")
     private int averageDuration;
 
-    @OneToMany
+    @OneToMany(mappedBy = "game", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Tournament> tournaments;
 
     public Game() {

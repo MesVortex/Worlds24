@@ -4,9 +4,9 @@ import org.esports.Model.Tournament;
 import java.util.List;
 
 public interface TournamentRepository {
-    void addTournament(Tournament tournament);
-    void updateTournament(Tournament tournament);
-    void deleteTournament(Long id);
+    boolean addTournament(Tournament tournament);
+    boolean updateTournament(Tournament tournament);
+    boolean deleteTournament(Long id);
     Tournament getTournament(Long id);
     List<Tournament> getTournaments();
 }

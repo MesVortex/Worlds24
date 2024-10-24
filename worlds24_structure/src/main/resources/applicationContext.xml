@@ -32,7 +32,7 @@
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.show_sql">false</prop>
             </props>
         </property>
     </bean>
@@ -53,21 +53,22 @@
 
     <!-- Repository beans -->
     <bean id="playerRepository" class="org.esports.Repository.Impl.PlayerRepositoryImpl">
-        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+        <constructor-arg ref="entityManagerFactory"/>
     </bean>
     <bean id="gameRepository" class="org.esports.Repository.Impl.GameRepositoryImpl">
-        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+        <constructor-arg ref="entityManagerFactory"/>
     </bean>
     <bean id="teamRepository" class="org.esports.Repository.Impl.TeamRepositoryImpl">
-        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+        <constructor-arg ref="entityManagerFactory"/>
     </bean>
     <bean id="tournamentRepository" class="org.esports.Repository.Impl.TournamentRepositoryImpl">
-        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+        <constructor-arg ref="entityManagerFactory"/>
     </bean>
 
     <!-- Service beans -->
     <bean id="playerService" class="org.esports.Service.PlayerService">
         <constructor-arg ref="playerRepository"/>
+        <constructor-arg ref="player" />
     </bean>
     <bean id="gameService" class="org.esports.Service.GameService">
         <constructor-arg ref="gameRepository"/>

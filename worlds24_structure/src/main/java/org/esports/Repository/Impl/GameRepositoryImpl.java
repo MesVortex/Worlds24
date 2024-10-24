@@ -8,10 +8,9 @@ import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 public class GameRepositoryImpl implements GameRepository {
-    private EntityManagerFactory entityManagerFactory;
+    private final EntityManagerFactory entityManagerFactory;
 
-    // Setter for dependency injection
-    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+    public GameRepositoryImpl(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 
@@ -20,15 +19,16 @@ public class GameRepositoryImpl implements GameRepository {
     }
 
     @Override
-    public void save(Game game) {
+    public boolean save(Game game) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(game);
             em.getTransaction().commit();
+            return true; // Success
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            throw e;
+            return false; // Failure
         } finally {
             em.close();
         }
@@ -40,8 +40,7 @@ public class GameRepositoryImpl implements GameRepository {
         try {
             return em.find(Game.class, id);
         } catch (RuntimeException e) {
-            em.getTransaction().rollback();
-            throw e;
+            return null; // In case of error, return null
         } finally {
             em.close();
         }
@@ -58,35 +57,41 @@ public class GameRepositoryImpl implements GameRepository {
     }
 
     @Override
-    public void update(Game game) {
+    public boolean update(Game game) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             em.merge(game);
             em.getTransaction().commit();
+            return true; // Success
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            throw e;
+            return false; // Failure
         } finally {
             em.close();
         }
     }
 
     @Override
-    public void delete(Long id) {
+    public boolean delete(Long id) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             Game game = em.find(Game.class, id);
             if (game != null) {
                 em.remove(game);
+                em.getTransaction().commit();
+                return true; // Success
+            } else {
+                em.getTransaction().rollback();
+                return false; // Game not found
             }
-            em.getTransaction().commit();
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            throw e;
+            return false; // Failure
         } finally {
             em.close();
         }
     }
+
 }

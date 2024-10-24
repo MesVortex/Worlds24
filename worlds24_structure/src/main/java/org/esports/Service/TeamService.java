@@ -13,16 +13,16 @@ public class TeamService {
         this.teamRepository = teamRepository;
     }
 
-    public void addTeam(Team team) {
-        teamRepository.addTeam(team);
+    public boolean addTeam(Team team) {
+        return teamRepository.addTeam(team);
     }
 
-    public void updateTeam(Team team) {
-        teamRepository.updateTeam(team);
+    public boolean updateTeam(Team team) {
+        return teamRepository.updateTeam(team);
     }
 
-    public void deleteTeam(Long id) {
-        teamRepository.deleteTeam(id);
+    public boolean deleteTeam(Long id) {
+        return teamRepository.deleteTeam(id);
     }
 
     public Team getTeam(Long id) {
@@ -32,4 +32,5 @@ public class TeamService {
     public List<Team> getTeams() {
         return teamRepository.getTeams();
     }
+
 }

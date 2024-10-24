@@ -21,7 +21,11 @@ public class Team {
     @Column(name = "ranking")
     private int ranking;
 
-    @OneToMany
+    @ManyToOne
+    @JoinColumn(name = "tournamentID")
+    private Tournament tournament;
+
+    @OneToMany(mappedBy = "team", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Player> players;
 
     public Team() {

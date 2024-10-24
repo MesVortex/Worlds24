@@ -35,7 +35,7 @@ public class Tournament {
     @Column(name = "number_of_spectators")
     private int numberOfSpectators;
 
-    @OneToMany
+    @OneToMany(mappedBy = "tournament", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Team> teams;
 
     @Column(name = "estimated_duration")
@@ -50,6 +50,11 @@ public class Tournament {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private TournamentStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "gameID", nullable = false)
+    @NotNull(message = "game cannot be null")
+    private Game game;
 
     public Tournament() {
     }

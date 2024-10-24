@@ -13,16 +13,16 @@ public class TournamentService {
         this.tournamentRepository = tournamentRepository;
     }
 
-    public void addTournament(Tournament tournament) {
-        tournamentRepository.addTournament(tournament);
+    public boolean addTournament(Tournament tournament) {
+        return tournamentRepository.addTournament(tournament);
     }
 
-    public void updateTournament(Tournament tournament) {
-        tournamentRepository.updateTournament(tournament);
+    public boolean updateTournament(Tournament tournament) {
+        return tournamentRepository.updateTournament(tournament);
     }
 
-    public void deleteTournament(Long id) {
-        tournamentRepository.deleteTournament(id);
+    public boolean deleteTournament(Long id) {
+        return tournamentRepository.deleteTournament(id);
     }
 
     public Tournament getTournament(Long id) {
@@ -32,4 +32,5 @@ public class TournamentService {
     public List<Tournament> getTournaments() {
         return tournamentRepository.getTournaments();
     }
+
 }

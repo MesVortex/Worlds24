@@ -8,10 +8,9 @@ import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 public class TeamRepositoryImpl implements TeamRepository {
-    private EntityManagerFactory entityManagerFactory;
+    private final EntityManagerFactory entityManagerFactory;
 
-    // Setter for dependency injection
-    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+    public TeamRepositoryImpl(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 
@@ -20,48 +19,54 @@ public class TeamRepositoryImpl implements TeamRepository {
     }
 
     @Override
-    public void addTeam(Team team) {
+    public boolean addTeam(Team team) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(team);
             em.getTransaction().commit();
+            return true; // Success
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            throw e;
+            return false; // Failure
         } finally {
             em.close();
         }
     }
 
     @Override
-    public void updateTeam(Team team) {
+    public boolean updateTeam(Team team) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             em.merge(team);
             em.getTransaction().commit();
+            return true; // Success
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            throw e;
+            return false; // Failure
         } finally {
             em.close();
         }
     }
 
     @Override
-    public void deleteTeam(Long id) {
+    public boolean deleteTeam(Long id) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             Team team = em.find(Team.class, id);
             if (team != null) {
                 em.remove(team);
+                em.getTransaction().commit();
+                return true; // Success
+            } else {
+                em.getTransaction().rollback();
+                return false; // Team not found
             }
-            em.getTransaction().commit();
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            throw e;
+            return false; // Failure
         } finally {
             em.close();
         }
@@ -86,4 +91,5 @@ public class TeamRepositoryImpl implements TeamRepository {
             em.close();
         }
     }
+
 }
