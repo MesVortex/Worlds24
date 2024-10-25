@@ -63,4 +63,20 @@ public class PlayerServiceTest {
         verify(playerRepository).getPlayer(playerId);
         verify(playerRepository).updatePlayer(existingPlayer);
     }
+
+    @Test
+    public void testDeletePlayer_SuccessfulDeletion() {
+        Long playerId = 1L;
+        Player player = new Player();
+        player.setId(playerId);
+
+        when(playerRepository.getPlayer(playerId)).thenReturn(player);
+        when(playerRepository.deletePlayer(playerId)).thenReturn(true);
+
+        boolean result = playerService.deletePlayer(playerId);
+
+        assertTrue(result);
+        verify(playerRepository).getPlayer(playerId);
+        verify(playerRepository).deletePlayer(playerId);
+    }
 }
