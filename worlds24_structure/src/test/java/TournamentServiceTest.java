@@ -10,7 +10,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class TournamentServiceTest {
@@ -46,5 +46,51 @@ public class TournamentServiceTest {
 
         assertTrue(result);
         verify(tournamentRepository, times(1)).addTournament(tournament);
+    }
+
+    @Test
+    public void testUpdateTournament() {
+        Long tournamentId = 1L;
+        String updatedTitle = "Updated Championship Tournament";
+        LocalDate updatedStartDate = LocalDate.of(2024, 6, 15);
+        LocalDate updatedEndDate = LocalDate.of(2024, 6, 25);
+        int updatedNumberOfSpectators = 7000;
+        int updatedEstimatedDuration = 150;
+        int updatedBreakBetweenGames = 20;
+        int updatedCeremonyTime = 40;
+        TournamentStatus updatedStatus = TournamentStatus.IN_PROGRESS;
+
+        Tournament existingTournament = new Tournament();
+        existingTournament.setId(tournamentId);
+        existingTournament.setTitle("Old Title");
+        existingTournament.setStartDate(LocalDate.of(2024, 5, 10));
+        existingTournament.setEndDate(LocalDate.of(2024, 5, 20));
+        existingTournament.setNumberOfSpectators(5000);
+        existingTournament.setEstimatedDuration(120);
+        existingTournament.setBreakBetweenGames(15);
+        existingTournament.setCeremonyTime(30);
+        existingTournament.setStatus(TournamentStatus.PLANNED);
+
+        when(tournamentRepository.getTournament(tournamentId)).thenReturn(existingTournament);
+        when(tournamentRepository.updateTournament(existingTournament)).thenReturn(true);
+
+        boolean result = tournamentService.updateTournament(
+                tournamentId, updatedTitle, updatedStartDate, updatedEndDate,
+                updatedNumberOfSpectators, updatedEstimatedDuration,
+                updatedBreakBetweenGames, updatedCeremonyTime, updatedStatus
+        );
+
+        assertTrue(result);
+        assertEquals(existingTournament.getTitle(), updatedTitle);
+        assertEquals(existingTournament.getStartDate(), updatedStartDate);
+        assertEquals(existingTournament.getEndDate(), updatedEndDate);
+        assertEquals(existingTournament.getNumberOfSpectators(), updatedNumberOfSpectators);
+        assertEquals(existingTournament.getEstimatedDuration(), updatedEstimatedDuration);
+        assertEquals(existingTournament.getBreakBetweenGames(), updatedBreakBetweenGames);
+        assertEquals(existingTournament.getCeremonyTime(), updatedCeremonyTime);
+        assertSame(existingTournament.getStatus(), updatedStatus);
+
+        verify(tournamentRepository).getTournament(tournamentId);
+        verify(tournamentRepository).updateTournament(existingTournament);
     }
 }
