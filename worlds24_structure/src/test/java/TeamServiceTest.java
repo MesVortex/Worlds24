@@ -40,4 +40,27 @@ public class TeamServiceTest {
         verify(teamRepository, times(1)).addTeam(team);
         assertTrue(result);
     }
+
+    @Test
+    public void testUpdateTeam() {
+        Long teamId = 1L;
+        String updatedName = "Team B";
+        int updatedRanking = 2;
+
+        Team existingTeam = new Team();
+        existingTeam.setId(teamId);
+        existingTeam.setName("Team A");
+        existingTeam.setRanking(1);
+
+        when(teamRepository.getTeam(teamId)).thenReturn(existingTeam);
+        when(teamRepository.updateTeam(existingTeam)).thenReturn(true);
+
+        boolean result = teamService.updateTeam(teamId, updatedName, updatedRanking);
+
+        assertTrue(result);
+        assertEquals(updatedName, existingTeam.getName());
+        assertEquals(updatedRanking, existingTeam.getRanking());
+        verify(teamRepository).getTeam(teamId);
+        verify(teamRepository).updateTeam(existingTeam);
+    }
 }
