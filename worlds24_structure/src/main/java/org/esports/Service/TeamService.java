@@ -7,13 +7,19 @@ import java.util.List;
 
 public class TeamService {
     private final TeamRepository teamRepository;
+    private final Team team;
 
     // Constructor for dependency injection
-    public TeamService(TeamRepository teamRepository) {
+    public TeamService(TeamRepository teamRepository, Team team) {
         this.teamRepository = teamRepository;
+        this.team = team;
     }
 
-    public boolean addTeam(Team team) {
+    public boolean addTeam(String name, int ranking) {
+
+        team.setName(name);
+        team.setRanking(ranking);
+
         return teamRepository.addTeam(team);
     }
 

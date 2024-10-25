@@ -31,7 +31,7 @@
         <property name="jpaProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
                 <prop key="hibernate.show_sql">false</prop>
             </props>
         </property>
@@ -75,6 +75,7 @@
     </bean>
     <bean id="teamService" class="org.esports.Service.TeamService">
         <constructor-arg ref="teamRepository"/>
+        <constructor-arg ref="team" />
     </bean>
     <bean id="tournamentService" class="org.esports.Service.TournamentService">
         <constructor-arg ref="tournamentRepository"/>

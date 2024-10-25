@@ -7,6 +7,7 @@ import org.esports.Service.PlayerService;
 import org.esports.Service.TeamService;
 import org.esports.Service.TournamentService;
 import org.esports.Utility.PlayerValidator;
+import org.esports.Utility.TeamValidator;
 
 public class ConsoleUI {
     private final GameService gameService;
@@ -98,7 +99,7 @@ public class ConsoleUI {
 
                 switch (choice) {
                     case 1:
-                        // Call teamService.createTeam() and handle input
+                        createTeam();
                         break;
                     case 2:
                         // Call teamService.updateTeam() and handle input
@@ -155,5 +156,19 @@ public class ConsoleUI {
         }
     }
 
+    private void createTeam() {
+        scanner.nextLine();
+        String name = TeamValidator.getTeamName(scanner);
+        int ranking = TeamValidator.getTeamRanking(scanner);
 
+        if (TeamValidator.isValidTeamName(name) && TeamValidator.isValidTeamRanking(ranking)) {
+            if (teamService.addTeam(name, ranking)) {
+                System.out.println("Team created successfully.");
+            } else {
+                System.out.println("Team creation failed.");
+            }
+        } else {
+            System.out.println("Invalid team details.");
+        }
+    }
 }
