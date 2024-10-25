@@ -102,7 +102,7 @@ public class ConsoleUI {
                         createTeam();
                         break;
                     case 2:
-                        // Call teamService.updateTeam() and handle input
+                        updateTeam();
                         break;
                     case 3:
                         // Call teamService.deleteTeam() and handle input
@@ -166,6 +166,25 @@ public class ConsoleUI {
                 System.out.println("Team created successfully.");
             } else {
                 System.out.println("Team creation failed.");
+            }
+        } else {
+            System.out.println("Invalid team details.");
+        }
+    }
+
+    private void updateTeam() {
+        System.out.print("Enter the ID of the team to update: ");
+        Long teamId = scanner.nextLong();
+        scanner.nextLine(); // Clear buffer
+
+        String updatedName = TeamValidator.getTeamName(scanner);
+        int updatedRanking = TeamValidator.getTeamRanking(scanner);
+
+        if (TeamValidator.isValidTeamName(updatedName) && TeamValidator.isValidTeamRanking(updatedRanking)) {
+            if (teamService.updateTeam(teamId, updatedName, updatedRanking)) {
+                System.out.println("Team updated successfully.");
+            } else {
+                System.out.println("Team update failed.");
             }
         } else {
             System.out.println("Invalid team details.");

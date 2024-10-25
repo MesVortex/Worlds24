@@ -23,7 +23,17 @@ public class TeamService {
         return teamRepository.addTeam(team);
     }
 
-    public boolean updateTeam(Team team) {
+    public boolean updateTeam(Long teamId, String name, int ranking) {
+        Team team = teamRepository.getTeam(teamId);
+
+        if (team == null) {
+            System.out.println("Team not found!");
+            return false;
+        }
+
+        team.setName(name);
+        team.setRanking(ranking);
+
         return teamRepository.updateTeam(team);
     }
 
