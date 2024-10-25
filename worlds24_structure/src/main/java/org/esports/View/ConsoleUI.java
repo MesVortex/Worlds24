@@ -172,7 +172,7 @@ public class ConsoleUI {
                         createGame();
                         break;
                     case 2:
-//                        updateGame();
+                        updateGame();
                         break;
                     default:
                         System.out.println("Invalid option.");
@@ -305,6 +305,22 @@ public class ConsoleUI {
             System.out.println("Game created successfully.");
         } else {
             System.out.println("Game creation failed.");
+        }
+    }
+
+    private void updateGame() {
+        System.out.print("Enter the ID of the game to update: ");
+        Long gameId = scanner.nextLong();
+        scanner.nextLine(); // Clear the buffer
+
+        String name = GameValidator.getGameName(scanner);
+        int difficulty = GameValidator.getDifficulty(scanner);
+        int averageDuration = GameValidator.getAverageDuration(scanner);
+
+        if (gameService.updateGame(gameId, name, difficulty, averageDuration)) {
+            System.out.println("Game updated successfully.");
+        } else {
+            System.out.println("Game update failed.");
         }
     }
 

@@ -24,24 +24,24 @@ public class PlayerService {
 
 
     public boolean updatePlayer(Long playerId, String name, int age) {
-        player = playerRepository.getPlayer(playerId);
+        Player exitingPlayer = playerRepository.getPlayer(playerId);
 
-        if (player == null) {
+        if (exitingPlayer == null) {
             System.out.println("Player not found!");
             return false;
         }
 
-        player.setNickname(name);
-        player.setAge(age);
+        exitingPlayer.setNickname(name);
+        exitingPlayer.setAge(age);
 
-        return playerRepository.updatePlayer(player);
+        return playerRepository.updatePlayer(exitingPlayer);
     }
 
 
     public boolean deletePlayer(Long playerId) {
-        player = playerRepository.getPlayer(playerId);
+        Player existingPlayer = playerRepository.getPlayer(playerId);
 
-        if (player == null) {
+        if (existingPlayer == null) {
             System.out.println("Player not found!");
             return false;
         }

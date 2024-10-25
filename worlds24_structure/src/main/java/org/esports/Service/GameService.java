@@ -31,8 +31,18 @@ public class GameService {
         return gameRepository.findAll();
     }
 
-    public boolean updateGame(Game game) {
-        return gameRepository.update(game);
+    public boolean updateGame(Long gameId, String name, int difficulty, int averageDuration) {
+        Game existingGame = gameRepository.findById(gameId);
+        if (existingGame == null) {
+            System.out.println("Game not found!");
+            return false;
+        }
+
+        existingGame.setName(name);
+        existingGame.setDifficulty(difficulty);
+        existingGame.setAverageDuration(averageDuration);
+
+        return gameRepository.update(existingGame);
     }
 
     public boolean removeGame(Long id) {
