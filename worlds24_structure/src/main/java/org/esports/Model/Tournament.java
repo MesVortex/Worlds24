@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.validation.constraints.FutureOrPresent;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -25,12 +25,12 @@ public class Tournament {
     @NotNull
     @FutureOrPresent
     @Column(name = "start_date", nullable = false)
-    private Date startDate;
+    private LocalDate startDate;
 
     @NotNull
     @FutureOrPresent
     @Column(name = "end_date", nullable = false)
-    private Date endDate;
+    private LocalDate endDate;
 
     @Column(name = "number_of_spectators")
     private int numberOfSpectators;
@@ -52,8 +52,8 @@ public class Tournament {
     private TournamentStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "gameID", nullable = false)
-    @NotNull(message = "game cannot be null")
+    @JoinColumn(name = "gameID")
+//    @NotNull(message = "game cannot be null")
     private Game game;
 
     public Tournament() {
@@ -75,19 +75,19 @@ public class Tournament {
         this.title = title;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

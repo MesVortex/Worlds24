@@ -1,13 +1,17 @@
 package org.esports.View;
 
+import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import org.esports.Model.Enum.TournamentStatus;
 import org.esports.Service.GameService;
 import org.esports.Service.PlayerService;
 import org.esports.Service.TeamService;
 import org.esports.Service.TournamentService;
 import org.esports.Utility.PlayerValidator;
 import org.esports.Utility.TeamValidator;
+import org.esports.Utility.TournamentValidator;
 
 public class ConsoleUI {
     private final GameService gameService;
@@ -30,6 +34,7 @@ public class ConsoleUI {
                 System.out.println("Select an option:");
                 System.out.println("1. Player Management");
                 System.out.println("2. Team Management");
+                System.out.println("3. Tournament Management");
 
                 int choice = scanner.nextInt();
                 validInput = true; // If input is valid, exit the loop
@@ -40,6 +45,9 @@ public class ConsoleUI {
                         break;
                     case 2:
                         manageTeams();
+                        break;
+                    case 3:
+                        manageTournaments();
                         break;
                     default:
                         System.out.println("Invalid option.");
@@ -92,7 +100,6 @@ public class ConsoleUI {
                 System.out.println("Team Management:");
                 System.out.println("1. Create Team");
                 System.out.println("2. Update Team");
-                System.out.println("3. Delete Team");
 
                 int choice = scanner.nextInt();
                 validInput = true;
@@ -104,8 +111,34 @@ public class ConsoleUI {
                     case 2:
                         updateTeam();
                         break;
-                    case 3:
-                        // Call teamService.deleteTeam() and handle input
+                    default:
+                        System.out.println("Invalid option.");
+                        validInput = false;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Please enter a valid number.");
+                scanner.next(); // Clear invalid input
+            }
+        }
+    }
+
+    private void manageTournaments() {
+        boolean validInput = false;
+        while (!validInput) {
+            try {
+                System.out.println("Tournament Management:");
+                System.out.println("1. Create Tournament");
+                System.out.println("2. Update Tournament");
+
+                int choice = scanner.nextInt();
+                validInput = true;
+
+                switch (choice) {
+                    case 1:
+                        createTournament();
+                        break;
+                    case 2:
+//                        updateTournament();
                         break;
                     default:
                         System.out.println("Invalid option.");
@@ -122,9 +155,9 @@ public class ConsoleUI {
         String name = PlayerValidator.getPlayerName(scanner);
         int age = PlayerValidator.getPlayerAge(scanner);
 
-        if(playerService.addPlayer(name, age)){
+        if (playerService.addPlayer(name, age)) {
             System.out.println("Player created successfully.");
-        }else{
+        } else {
             System.out.println("Player creation failed.");
         }
     }
@@ -188,6 +221,23 @@ public class ConsoleUI {
             }
         } else {
             System.out.println("Invalid team details.");
+        }
+    }
+
+    private void createTournament() {
+        String title = TournamentValidator.getTournamentTitle(scanner);
+        LocalDate startDate = TournamentValidator.getTournamentStartDate(scanner);
+        LocalDate endDate = TournamentValidator.getTournamentEndDate(scanner);
+        int numberOfSpectators = TournamentValidator.getNumberOfSpectators(scanner);
+        int estimatedDuration = TournamentValidator.getEstimatedDuration(scanner);
+        int breakBetweenGames = TournamentValidator.getBreakBetweenGames(scanner);
+        int ceremonyTime = TournamentValidator.getCeremonyTime(scanner);
+        TournamentStatus status = TournamentValidator.getTournamentStatus(scanner);
+
+        if (tournamentService.addTournament(title, startDate, endDate, numberOfSpectators, estimatedDuration, breakBetweenGames, ceremonyTime, status)) {
+            System.out.println("Tournament created successfully.");
+        } else {
+            System.out.println("Tournament creation failed.");
         }
     }
 }
