@@ -9,7 +9,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class TournamentValidator {
-    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static String getTournamentTitle(Scanner scanner) {
         System.out.print("Enter tournament title: ");
@@ -17,11 +17,11 @@ public class TournamentValidator {
     }
 
     public static LocalDate getTournamentStartDate(Scanner scanner) {
-        return getLocalDateInput(scanner, "Enter tournament start date (DD/MM/YYYY): ");
+        return getLocalDateInput(scanner, "Enter tournament start date (YYYY-MM-DD): ");
     }
 
     public static LocalDate getTournamentEndDate(Scanner scanner) {
-        return getLocalDateInput(scanner, "Enter tournament end date (DD/MM/YYYY): ");
+        return getLocalDateInput(scanner, "Enter tournament end date (YYYY-MM-DD): ");
     }
 
     private static LocalDate getLocalDateInput(Scanner scanner, String prompt) {
