@@ -9,6 +9,7 @@ import org.esports.Service.GameService;
 import org.esports.Service.PlayerService;
 import org.esports.Service.TeamService;
 import org.esports.Service.TournamentService;
+import org.esports.Utility.GameValidator;
 import org.esports.Utility.PlayerValidator;
 import org.esports.Utility.TeamValidator;
 import org.esports.Utility.TournamentValidator;
@@ -35,6 +36,7 @@ public class ConsoleUI {
                 System.out.println("1. Player Management");
                 System.out.println("2. Team Management");
                 System.out.println("3. Tournament Management");
+                System.out.println("4. Game Management");
 
                 int choice = scanner.nextInt();
                 validInput = true; // If input is valid, exit the loop
@@ -48,6 +50,9 @@ public class ConsoleUI {
                         break;
                     case 3:
                         manageTournaments();
+                        break;
+                    case 4:
+                        manageGames();
                         break;
                     default:
                         System.out.println("Invalid option.");
@@ -139,6 +144,35 @@ public class ConsoleUI {
                         break;
                     case 2:
                         updateTournament();
+                        break;
+                    default:
+                        System.out.println("Invalid option.");
+                        validInput = false;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Please enter a valid number.");
+                scanner.next(); // Clear invalid input
+            }
+        }
+    }
+
+    private void manageGames() {
+        boolean validInput = false;
+        while (!validInput) {
+            try {
+                System.out.println("Game Management:");
+                System.out.println("1. Create Game");
+                System.out.println("2. Update Game");
+
+                int choice = scanner.nextInt();
+                validInput = true;
+
+                switch (choice) {
+                    case 1:
+                        createGame();
+                        break;
+                    case 2:
+//                        updateGame();
                         break;
                     default:
                         System.out.println("Invalid option.");
@@ -261,4 +295,17 @@ public class ConsoleUI {
             System.out.println("Tournament update failed.");
         }
     }
+
+    private void createGame() {
+        String name = GameValidator.getGameName(scanner);
+        int difficulty = GameValidator.getDifficulty(scanner);
+        int averageDuration = GameValidator.getAverageDuration(scanner);
+
+        if (gameService.addGame(name, difficulty, averageDuration)) {
+            System.out.println("Game created successfully.");
+        } else {
+            System.out.println("Game creation failed.");
+        }
+    }
+
 }
