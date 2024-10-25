@@ -1,6 +1,7 @@
 import org.esports.Model.Player;
 import org.esports.Repository.Interface.PlayerRepository;
 import org.esports.Service.PlayerService;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -38,5 +39,28 @@ public class PlayerServiceTest {
         verify(player).setNickname(playerName);
         verify(player).setAge(playerAge);
         verify(playerRepository, times(1)).addPlayer(player);
+    }
+
+    @Test
+    public void testUpdatePlayer() {
+        Long playerId = 1L;
+        String updatedName = "NewName";
+        int updatedAge = 25;
+
+        Player existingPlayer = new Player();
+        existingPlayer.setId(playerId);
+        existingPlayer.setNickname("OldName");
+        existingPlayer.setAge(20);
+
+        when(playerRepository.getPlayer(playerId)).thenReturn(existingPlayer);
+        when(playerRepository.updatePlayer(existingPlayer)).thenReturn(true);
+
+        boolean result = playerService.updatePlayer(playerId, updatedName, updatedAge);
+
+        assertTrue(result);
+        assertEquals(updatedName, existingPlayer.getNickname());
+        assertEquals(updatedAge, existingPlayer.getAge());
+        verify(playerRepository).getPlayer(playerId);
+        verify(playerRepository).updatePlayer(existingPlayer);
     }
 }
