@@ -71,7 +71,7 @@ public class ConsoleUI {
                         updatePlayer();
                         break;
                     case 3:
-//                        deletePlayer();
+                        deletePlayer();
                         break;
                     default:
                         System.out.println("Invalid option.");
@@ -142,5 +142,18 @@ public class ConsoleUI {
             System.out.println("Player update failed.");
         }
     }
+
+    private void deletePlayer() {
+        System.out.print("Enter the ID of the player to delete: ");
+        Long playerId = scanner.nextLong();
+        scanner.nextLine(); // Clear buffer
+
+        if (playerService.deletePlayer(playerId)) {
+            System.out.println("Player deleted successfully.");
+        } else {
+            System.out.println("Player deletion failed. Player not found.");
+        }
+    }
+
 
 }

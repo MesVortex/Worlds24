@@ -38,9 +38,17 @@ public class PlayerService {
     }
 
 
-    public boolean deletePlayer(Long id) {
-        return playerRepository.deletePlayer(id);
+    public boolean deletePlayer(Long playerId) {
+        Player player = playerRepository.getPlayer(playerId);
+
+        if (player == null) {
+            System.out.println("Player not found!");
+            return false;
+        }
+
+        return playerRepository.deletePlayer(playerId);
     }
+
 
     public Player getPlayer(Long id) {
         return playerRepository.getPlayer(id);
