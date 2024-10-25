@@ -138,7 +138,7 @@ public class ConsoleUI {
                         createTournament();
                         break;
                     case 2:
-//                        updateTournament();
+                        updateTournament();
                         break;
                     default:
                         System.out.println("Invalid option.");
@@ -238,6 +238,27 @@ public class ConsoleUI {
             System.out.println("Tournament created successfully.");
         } else {
             System.out.println("Tournament creation failed.");
+        }
+    }
+
+    private void updateTournament() {
+        System.out.print("Enter the ID of the tournament to update: ");
+        Long tournamentId = scanner.nextLong();
+        scanner.nextLine(); // Clear buffer
+
+        String updatedTitle = TournamentValidator.getTournamentTitle(scanner);
+        LocalDate updatedStartDate = TournamentValidator.getTournamentStartDate(scanner);
+        LocalDate updatedEndDate = TournamentValidator.getTournamentEndDate(scanner);
+        int updatedNumberOfSpectators = TournamentValidator.getNumberOfSpectators(scanner);
+        int updatedEstimatedDuration = TournamentValidator.getEstimatedDuration(scanner);
+        int updatedBreakBetweenGames = TournamentValidator.getBreakBetweenGames(scanner);
+        int updatedCeremonyTime = TournamentValidator.getCeremonyTime(scanner);
+        TournamentStatus updatedStatus = TournamentValidator.getTournamentStatus(scanner);
+
+        if (tournamentService.updateTournament(tournamentId, updatedTitle, updatedStartDate, updatedEndDate, updatedNumberOfSpectators, updatedEstimatedDuration, updatedBreakBetweenGames, updatedCeremonyTime, updatedStatus)) {
+            System.out.println("Tournament updated successfully.");
+        } else {
+            System.out.println("Tournament update failed.");
         }
     }
 }

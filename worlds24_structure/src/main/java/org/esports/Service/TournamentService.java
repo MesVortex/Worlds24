@@ -9,7 +9,7 @@ import java.util.List;
 
 public class TournamentService {
     private final TournamentRepository tournamentRepository;
-    private final Tournament tournament;
+    private Tournament tournament;
 
     // Constructor for dependency injection
     public TournamentService(TournamentRepository tournamentRepository, Tournament tournament) {
@@ -29,8 +29,23 @@ public class TournamentService {
         return tournamentRepository.addTournament(tournament);
     }
 
-    public boolean updateTournament(Tournament tournament) {
-        return tournamentRepository.updateTournament(tournament);
+    public boolean updateTournament(Long tournamentId, String title, LocalDate startDate, LocalDate endDate, int numberOfSpectators, int estimatedDuration, int breakBetweenGames, int ceremonyTime, TournamentStatus status) {
+        Tournament existingTournament = tournamentRepository.getTournament(tournamentId);
+        if (existingTournament == null) {
+            System.out.println("Tournament not found!");
+            return false;
+        }
+
+        existingTournament.setTitle(title);
+        existingTournament.setStartDate(startDate);
+        existingTournament.setEndDate(endDate);
+        existingTournament.setNumberOfSpectators(numberOfSpectators);
+        existingTournament.setEstimatedDuration(estimatedDuration);
+        existingTournament.setBreakBetweenGames(breakBetweenGames);
+        existingTournament.setCeremonyTime(ceremonyTime);
+        existingTournament.setStatus(status);
+
+        return tournamentRepository.updateTournament(existingTournament);
     }
 
     public boolean deleteTournament(Long id) {

@@ -7,7 +7,7 @@ import java.util.List;
 
 public class TeamService {
     private final TeamRepository teamRepository;
-    private final Team team;
+    private Team team;
 
     // Constructor for dependency injection
     public TeamService(TeamRepository teamRepository, Team team) {
@@ -24,7 +24,7 @@ public class TeamService {
     }
 
     public boolean updateTeam(Long teamId, String name, int ranking) {
-        Team team = teamRepository.getTeam(teamId);
+        team = teamRepository.getTeam(teamId);
 
         if (team == null) {
             System.out.println("Team not found!");

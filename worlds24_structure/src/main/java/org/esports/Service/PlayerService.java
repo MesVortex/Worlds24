@@ -7,7 +7,7 @@ import java.util.List;
 
 public class PlayerService {
     private final PlayerRepository playerRepository;
-    private final Player player;
+    private Player player;
 
     public PlayerService(PlayerRepository playerRepository, Player player) {
         this.playerRepository = playerRepository;
@@ -24,7 +24,7 @@ public class PlayerService {
 
 
     public boolean updatePlayer(Long playerId, String name, int age) {
-        Player player = playerRepository.getPlayer(playerId);
+        player = playerRepository.getPlayer(playerId);
 
         if (player == null) {
             System.out.println("Player not found!");
@@ -39,7 +39,7 @@ public class PlayerService {
 
 
     public boolean deletePlayer(Long playerId) {
-        Player player = playerRepository.getPlayer(playerId);
+        player = playerRepository.getPlayer(playerId);
 
         if (player == null) {
             System.out.println("Player not found!");
