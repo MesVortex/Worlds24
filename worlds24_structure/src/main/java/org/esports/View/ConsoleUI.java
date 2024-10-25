@@ -68,10 +68,10 @@ public class ConsoleUI {
                         createPlayer();
                         break;
                     case 2:
-                        // Call playerService.updatePlayer() and handle input
+                        updatePlayer();
                         break;
                     case 3:
-                        // Call playerService.deletePlayer() and handle input
+//                        deletePlayer();
                         break;
                     default:
                         System.out.println("Invalid option.");
@@ -127,4 +127,20 @@ public class ConsoleUI {
             System.out.println("Player creation failed.");
         }
     }
+
+    private void updatePlayer() {
+        System.out.print("Enter the ID of the player to update: ");
+        Long playerId = scanner.nextLong();
+        scanner.nextLine(); // Clear buffer
+
+        String updatedName = PlayerValidator.getPlayerName(scanner);
+        int updatedAge = PlayerValidator.getPlayerAge(scanner);
+
+        if (playerService.updatePlayer(playerId, updatedName, updatedAge)) {
+            System.out.println("Player updated successfully.");
+        } else {
+            System.out.println("Player update failed.");
+        }
+    }
+
 }

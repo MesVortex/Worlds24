@@ -11,7 +11,7 @@ public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @NotNull
     @Size(min = 1, max = 100)
@@ -30,19 +30,19 @@ public class Game {
     public Game() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public @NotNull @Size(min = 1, max = 100) String getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(@NotNull @Size(min = 1, max = 100) String name) {
+    public void setName(String name) {
         this.name = name;
     }
 

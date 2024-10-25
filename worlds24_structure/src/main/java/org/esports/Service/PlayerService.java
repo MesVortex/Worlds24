@@ -23,9 +23,20 @@ public class PlayerService {
     }
 
 
-    public boolean updatePlayer(Player player) {
+    public boolean updatePlayer(Long playerId, String name, int age) {
+        Player player = playerRepository.getPlayer(playerId);
+
+        if (player == null) {
+            System.out.println("Player not found!");
+            return false;
+        }
+
+        player.setNickname(name);
+        player.setAge(age);
+
         return playerRepository.updatePlayer(player);
     }
+
 
     public boolean deletePlayer(Long id) {
         return playerRepository.deletePlayer(id);
@@ -38,5 +49,4 @@ public class PlayerService {
     public List<Player> getPlayers() {
         return playerRepository.getPlayers();
     }
-
 }

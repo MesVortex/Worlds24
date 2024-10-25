@@ -15,7 +15,7 @@ public class Tournament {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @NotNull
     @Size(min = 1, max = 200)
@@ -59,35 +59,35 @@ public class Tournament {
     public Tournament() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public @NotNull @Size(min = 1, max = 200) String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(@NotNull @Size(min = 1, max = 200) String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public @NotNull @FutureOrPresent Date getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(@NotNull @FutureOrPresent Date startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public @NotNull @FutureOrPresent Date getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(@NotNull @FutureOrPresent Date endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 
