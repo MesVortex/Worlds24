@@ -186,17 +186,6 @@ public class ConsoleUI {
         System.out.println(success ? "Team created successfully." : "Team creation failed.");
     }
 
-
-    private void updateTeam() {
-        Long teamId = TeamValidator.getTeamId(scanner);
-        String updatedName = TeamValidator.getTeamName(scanner);
-        int updatedRanking = TeamValidator.getTeamRanking(scanner);
-
-        boolean success = teamService.updateTeam(teamId, updatedName, updatedRanking);
-        System.out.println(success ? "Team updated successfully." : "Team update failed.");
-    }
-
-
     private void addPlayerToTeam() {
         Long teamId = TeamValidator.getTeamId(scanner);  // Get team ID
         Long playerId = PlayerValidator.getPlayerId(scanner);  // Get player ID
@@ -226,6 +215,15 @@ public class ConsoleUI {
 
         boolean success = teamService.removePlayerFromTeam(teamId, player);
         System.out.println(success ? "Player removed from team successfully." : "Failed to remove player from team.");
+    }
+
+    private void updateTeam() {
+        Long teamId = TeamValidator.getTeamId(scanner);
+        String updatedName = TeamValidator.getTeamName(scanner);
+        int updatedRanking = TeamValidator.getTeamRanking(scanner);
+
+        boolean success = teamService.updateTeam(teamId, updatedName, updatedRanking);
+        System.out.println(success ? "Team updated successfully." : "Team update failed.");
     }
 
     private void createTournament() {
