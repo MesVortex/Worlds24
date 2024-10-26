@@ -1,3 +1,4 @@
+import org.esports.Model.Player;
 import org.esports.Model.Team;
 import org.esports.Repository.Interface.TeamRepository;
 import org.esports.Service.TeamService;
@@ -7,6 +8,9 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -62,5 +66,47 @@ public class TeamServiceTest {
         assertEquals(updatedRanking, existingTeam.getRanking());
         verify(teamRepository).getTeam(teamId);
         verify(teamRepository).updateTeam(existingTeam);
+    }
+
+    @Test
+    public void testAddPlayerToTeam() {
+        Long teamId = 1L;
+        Team team = new Team();
+        team.setId(teamId);
+        team.setPlayers(new ArrayList<>());
+
+        Player player = new Player();
+        player.setTeam(null);
+
+        when(teamRepository.getTeam(teamId)).thenReturn(team);
+        when(teamRepository.updateTeam(team)).thenReturn(true);
+
+        boolean result = teamService.addPlayerToTeam(teamId, player);
+
+        assertTrue(result);
+        assertTrue(team.getPlayers().contains(player));
+        assertEquals(team, player.getTeam());
+    }
+
+    @Test
+    public void testRemovePlayerFromTeam() {
+        Long teamId = 1L;
+        Team team = new Team();
+        team.setId(teamId);
+        Player player = new Player();
+        player.setTeam(team);
+
+        List<Player> players = new ArrayList<>();
+        players.add(player);
+        team.setPlayers(players);
+
+        when(teamRepository.getTeam(teamId)).thenReturn(team);
+        when(teamRepository.updateTeam(team)).thenReturn(true);
+
+        boolean result = teamService.removePlayerFromTeam(teamId, player);
+
+        assertTrue(result);
+        assertFalse(team.getPlayers().contains(player));
+        assertNull(player.getTeam());
     }
 }
