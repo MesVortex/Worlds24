@@ -1,8 +1,25 @@
 package org.esports.Utility;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class GameValidator {
+
+    public static Long getGameId(Scanner scanner) {
+        Long gameId = null;
+        boolean validInput = false;
+        while (!validInput) {
+            try {
+                System.out.print("Enter the ID of the game: ");
+                gameId = scanner.nextLong();
+                validInput = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a valid game ID (number).");
+                scanner.next(); // Clear invalid input
+            }
+        }
+        return gameId;
+    }
 
     public static String getGameName(Scanner scanner) {
         String name;

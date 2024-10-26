@@ -5,6 +5,22 @@ import java.util.Scanner;
 
 public class PlayerValidator {
 
+    public static Long getPlayerId(Scanner scanner) {
+        Long playerId = null;
+        boolean validInput = false;
+        while (!validInput) {
+            try {
+                System.out.print("Enter the ID of the player: ");
+                playerId = scanner.nextLong();
+                validInput = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a valid player ID (number).");
+                scanner.next(); // Clear invalid input
+            }
+        }
+        return playerId;
+    }
+
     public static String getPlayerName(Scanner sc) {
         System.out.println("Enter Player Name:");
         return sc.next();

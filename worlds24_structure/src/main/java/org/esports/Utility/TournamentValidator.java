@@ -11,6 +11,22 @@ import java.util.Scanner;
 public class TournamentValidator {
     private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    public static Long getTournamentId(Scanner scanner) {
+        Long tournamentId = null;
+        boolean validInput = false;
+        while (!validInput) {
+            try {
+                System.out.print("Enter the ID of the tournament: ");
+                tournamentId = scanner.nextLong();
+                validInput = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a valid tournament ID (number).");
+                scanner.next(); // Clear invalid input
+            }
+        }
+        return tournamentId;
+    }
+
     public static String getTournamentTitle(Scanner scanner) {
         System.out.print("Enter tournament title: ");
         return scanner.nextLine();

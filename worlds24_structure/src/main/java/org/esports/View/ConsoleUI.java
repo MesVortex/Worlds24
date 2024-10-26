@@ -5,6 +5,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import org.esports.Model.Enum.TournamentStatus;
+import org.esports.Model.Player;
 import org.esports.Service.GameService;
 import org.esports.Service.PlayerService;
 import org.esports.Service.TeamService;
@@ -28,160 +29,127 @@ public class ConsoleUI {
         this.tournamentService = tournamentService;
     }
 
-    public void showMenu() {
-        boolean validInput = false;
-        while (!validInput) {
+    private int getMenuSelection(String prompt, int max) {
+        while (true) {
             try {
-                System.out.println("Select an option:");
-                System.out.println("1. Player Management");
-                System.out.println("2. Team Management");
-                System.out.println("3. Tournament Management");
-                System.out.println("4. Game Management");
-
+                System.out.println(prompt);
                 int choice = scanner.nextInt();
-                validInput = true; // If input is valid, exit the loop
-
-                switch (choice) {
-                    case 1:
-                        managePlayers();
-                        break;
-                    case 2:
-                        manageTeams();
-                        break;
-                    case 3:
-                        manageTournaments();
-                        break;
-                    case 4:
-                        manageGames();
-                        break;
-                    default:
-                        System.out.println("Invalid option.");
-                        validInput = false; // If invalid option, repeat
-                }
+                scanner.nextLine(); // Clear buffer
+                if (choice >= 1 && choice <= max) return choice;
+                System.out.println("Please choose a valid option.");
             } catch (InputMismatchException e) {
                 System.out.println("Please enter a valid number.");
-                scanner.next(); // Clear invalid input
+                scanner.next();
+            }
+        }
+    }
+    public void showMenu() {
+        while (true) {
+            String menuPrompt = "Select an option:\n" +
+                    "1. Player Management\n" +
+                    "2. Team Management\n" +
+                    "3. Tournament Management\n" +
+                    "4. Game Management\n" +
+                    "5. Exit";
+            int choice = getMenuSelection(menuPrompt, 5);
+
+            switch (choice) {
+                case 1:
+                    managePlayers();
+                    break;
+                case 2:
+                    manageTeams();
+                    break;
+                case 3:
+                    manageTournaments();
+                    break;
+                case 4:
+                    manageGames();
+                    break;
+                case 5:
+                    System.out.println("Exiting the application. Goodbye!");
+                    return;
+                default:
+                    System.out.println("Invalid option.");
+                    break;
             }
         }
     }
 
     private void managePlayers() {
-        boolean validInput = false;
-        while (!validInput) {
-            try {
-                System.out.println("Player Management:");
-                System.out.println("1. Create Player");
-                System.out.println("2. Update Player");
-                System.out.println("3. Delete Player");
+        String playerMenu = "Player Management:\n1. Create Player\n2. Update Player\n3. Delete Player";
+        int choice = getMenuSelection(playerMenu, 3);
 
-                int choice = scanner.nextInt();
-                validInput = true;
-
-                switch (choice) {
-                    case 1:
-                        createPlayer();
-                        break;
-                    case 2:
-                        updatePlayer();
-                        break;
-                    case 3:
-                        deletePlayer();
-                        break;
-                    default:
-                        System.out.println("Invalid option.");
-                        validInput = false;
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Please enter a valid number.");
-                scanner.next(); // Clear invalid input
-            }
+        switch (choice) {
+            case 1:
+                createPlayer();
+                break;
+            case 2:
+                updatePlayer();
+                break;
+            case 3:
+                deletePlayer();
+                break;
+            default:
+                System.out.println("Invalid option.");
         }
     }
 
+
     private void manageTeams() {
-        boolean validInput = false;
-        while (!validInput) {
-            try {
-                System.out.println("Team Management:");
-                System.out.println("1. Create Team");
-                System.out.println("2. Update Team");
+        String teamMenu = "Team Management:\n1. Create Team\n2. Update Team\n3. Add player to a team\n4. Remove player from a team";
+        int choice = getMenuSelection(teamMenu, 4);
 
-                int choice = scanner.nextInt();
-                validInput = true;
-
-                switch (choice) {
-                    case 1:
-                        createTeam();
-                        break;
-                    case 2:
-                        updateTeam();
-                        break;
-                    default:
-                        System.out.println("Invalid option.");
-                        validInput = false;
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Please enter a valid number.");
-                scanner.next(); // Clear invalid input
-            }
+        switch (choice) {
+            case 1:
+                createTeam();
+                break;
+            case 2:
+                updateTeam();
+                break;
+            case 3:
+                addPlayerToTeam();
+                break;
+            case 4:
+                removePlayerFromTeam();
+                break;
+            default:
+                System.out.println("Invalid option.");
+                break;
         }
     }
 
     private void manageTournaments() {
-        boolean validInput = false;
-        while (!validInput) {
-            try {
-                System.out.println("Tournament Management:");
-                System.out.println("1. Create Tournament");
-                System.out.println("2. Update Tournament");
+        String tournamentMenu = "Tournament Management:\n1. Create Tournament\n2. Update Tournament";
+        int choice = getMenuSelection(tournamentMenu, 2);
 
-                int choice = scanner.nextInt();
-                validInput = true;
-
-                switch (choice) {
-                    case 1:
-                        createTournament();
-                        break;
-                    case 2:
-                        updateTournament();
-                        break;
-                    default:
-                        System.out.println("Invalid option.");
-                        validInput = false;
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Please enter a valid number.");
-                scanner.next(); // Clear invalid input
-            }
+        switch (choice) {
+            case 1:
+                createTournament();
+                break;
+            case 2:
+                updateTournament();
+                break;
+            default:
+                System.out.println("Invalid option.");
+                break;
         }
     }
 
     private void manageGames() {
-        boolean validInput = false;
-        while (!validInput) {
-            try {
-                System.out.println("Game Management:");
-                System.out.println("1. Create Game");
-                System.out.println("2. Update Game");
+        String gameMenu = "Game Management:\n1. Create Game\n2. Update Game";
+        int choice = getMenuSelection(gameMenu, 2);
 
-                int choice = scanner.nextInt();
-                validInput = true;
-
-                switch (choice) {
-                    case 1:
-                        createGame();
-                        break;
-                    case 2:
-                        updateGame();
-                        break;
-                    default:
-                        System.out.println("Invalid option.");
-                        validInput = false;
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Please enter a valid number.");
-                scanner.next(); // Clear invalid input
-            }
+        switch (choice) {
+            case 1:
+                createGame();
+                break;
+            case 2:
+                updateGame();
+                break;
+            default:
+                System.out.println("Invalid option.");
+                break;
         }
     }
 
@@ -189,73 +157,75 @@ public class ConsoleUI {
         String name = PlayerValidator.getPlayerName(scanner);
         int age = PlayerValidator.getPlayerAge(scanner);
 
-        if (playerService.addPlayer(name, age)) {
-            System.out.println("Player created successfully.");
-        } else {
-            System.out.println("Player creation failed.");
-        }
+        boolean success = playerService.addPlayer(name, age);
+        System.out.println(success ? "Player created successfully." : "Player creation failed.");
     }
 
-    private void updatePlayer() {
-        System.out.print("Enter the ID of the player to update: ");
-        Long playerId = scanner.nextLong();
-        scanner.nextLine(); // Clear buffer
 
+    private void updatePlayer() {
+        Long playerId = PlayerValidator.getPlayerId(scanner);
         String updatedName = PlayerValidator.getPlayerName(scanner);
         int updatedAge = PlayerValidator.getPlayerAge(scanner);
 
-        if (playerService.updatePlayer(playerId, updatedName, updatedAge)) {
-            System.out.println("Player updated successfully.");
-        } else {
-            System.out.println("Player update failed.");
-        }
+        boolean success = playerService.updatePlayer(playerId, updatedName, updatedAge);
+        System.out.println(success ? "Player updated successfully." : "Player update failed.");
     }
 
     private void deletePlayer() {
-        System.out.print("Enter the ID of the player to delete: ");
-        Long playerId = scanner.nextLong();
-        scanner.nextLine(); // Clear buffer
+        Long playerId = PlayerValidator.getPlayerId(scanner);
 
-        if (playerService.deletePlayer(playerId)) {
-            System.out.println("Player deleted successfully.");
-        } else {
-            System.out.println("Player deletion failed. Player not found.");
-        }
+        boolean success = playerService.deletePlayer(playerId);
+        System.out.println(success ? "Player deleted successfully." : "Player deletion failed. Player not found.");
     }
 
     private void createTeam() {
-        scanner.nextLine();
         String name = TeamValidator.getTeamName(scanner);
         int ranking = TeamValidator.getTeamRanking(scanner);
 
-        if (TeamValidator.isValidTeamName(name) && TeamValidator.isValidTeamRanking(ranking)) {
-            if (teamService.addTeam(name, ranking)) {
-                System.out.println("Team created successfully.");
-            } else {
-                System.out.println("Team creation failed.");
-            }
-        } else {
-            System.out.println("Invalid team details.");
-        }
+        boolean success = teamService.addTeam(name, ranking);
+        System.out.println(success ? "Team created successfully." : "Team creation failed.");
     }
 
-    private void updateTeam() {
-        System.out.print("Enter the ID of the team to update: ");
-        Long teamId = scanner.nextLong();
-        scanner.nextLine(); // Clear buffer
 
+    private void updateTeam() {
+        Long teamId = TeamValidator.getTeamId(scanner);
         String updatedName = TeamValidator.getTeamName(scanner);
         int updatedRanking = TeamValidator.getTeamRanking(scanner);
 
-        if (TeamValidator.isValidTeamName(updatedName) && TeamValidator.isValidTeamRanking(updatedRanking)) {
-            if (teamService.updateTeam(teamId, updatedName, updatedRanking)) {
-                System.out.println("Team updated successfully.");
-            } else {
-                System.out.println("Team update failed.");
-            }
-        } else {
-            System.out.println("Invalid team details.");
+        boolean success = teamService.updateTeam(teamId, updatedName, updatedRanking);
+        System.out.println(success ? "Team updated successfully." : "Team update failed.");
+    }
+
+
+    private void addPlayerToTeam() {
+        Long teamId = TeamValidator.getTeamId(scanner);  // Get team ID
+        Long playerId = PlayerValidator.getPlayerId(scanner);  // Get player ID
+
+        Player player = playerService.getPlayer(playerId);
+
+        if (player == null) {
+            System.out.println("Player with the specified ID does not exist.");
+            return;
         }
+
+        boolean success = teamService.addPlayerToTeam(teamId, player);
+        System.out.println(success ? "Player added to team successfully." : "Failed to add player to team.");
+    }
+
+
+    private void removePlayerFromTeam() {
+        Long teamId = TeamValidator.getTeamId(scanner);  // Get team ID
+        Long playerId = PlayerValidator.getPlayerId(scanner);  // Get player ID
+
+        Player player = playerService.getPlayer(playerId);
+
+        if (player == null) {
+            System.out.println("Player with the specified ID does not exist.");
+            return;
+        }
+
+        boolean success = teamService.removePlayerFromTeam(teamId, player);
+        System.out.println(success ? "Player removed from team successfully." : "Failed to remove player from team.");
     }
 
     private void createTournament() {
@@ -268,18 +238,12 @@ public class ConsoleUI {
         int ceremonyTime = TournamentValidator.getCeremonyTime(scanner);
         TournamentStatus status = TournamentValidator.getTournamentStatus(scanner);
 
-        if (tournamentService.addTournament(title, startDate, endDate, numberOfSpectators, estimatedDuration, breakBetweenGames, ceremonyTime, status)) {
-            System.out.println("Tournament created successfully.");
-        } else {
-            System.out.println("Tournament creation failed.");
-        }
+        boolean success = tournamentService.addTournament(title, startDate, endDate, numberOfSpectators, estimatedDuration, breakBetweenGames, ceremonyTime, status);
+        System.out.println(success ? "Tournament created successfully." : "Tournament creation failed.");
     }
 
     private void updateTournament() {
-        System.out.print("Enter the ID of the tournament to update: ");
-        Long tournamentId = scanner.nextLong();
-        scanner.nextLine(); // Clear buffer
-
+        Long tournamentId = TournamentValidator.getTournamentId(scanner);
         String updatedTitle = TournamentValidator.getTournamentTitle(scanner);
         LocalDate updatedStartDate = TournamentValidator.getTournamentStartDate(scanner);
         LocalDate updatedEndDate = TournamentValidator.getTournamentEndDate(scanner);
@@ -289,11 +253,8 @@ public class ConsoleUI {
         int updatedCeremonyTime = TournamentValidator.getCeremonyTime(scanner);
         TournamentStatus updatedStatus = TournamentValidator.getTournamentStatus(scanner);
 
-        if (tournamentService.updateTournament(tournamentId, updatedTitle, updatedStartDate, updatedEndDate, updatedNumberOfSpectators, updatedEstimatedDuration, updatedBreakBetweenGames, updatedCeremonyTime, updatedStatus)) {
-            System.out.println("Tournament updated successfully.");
-        } else {
-            System.out.println("Tournament update failed.");
-        }
+        boolean success = tournamentService.updateTournament(tournamentId, updatedTitle, updatedStartDate, updatedEndDate, updatedNumberOfSpectators, updatedEstimatedDuration, updatedBreakBetweenGames, updatedCeremonyTime, updatedStatus);
+        System.out.println(success ? "Tournament updated successfully." : "Tournament update failed.");
     }
 
     private void createGame() {
@@ -301,27 +262,17 @@ public class ConsoleUI {
         int difficulty = GameValidator.getDifficulty(scanner);
         int averageDuration = GameValidator.getAverageDuration(scanner);
 
-        if (gameService.addGame(name, difficulty, averageDuration)) {
-            System.out.println("Game created successfully.");
-        } else {
-            System.out.println("Game creation failed.");
-        }
+        boolean success = gameService.addGame(name, difficulty, averageDuration);
+        System.out.println(success ? "Game created successfully." : "Game creation failed.");
     }
 
     private void updateGame() {
-        System.out.print("Enter the ID of the game to update: ");
-        Long gameId = scanner.nextLong();
-        scanner.nextLine(); // Clear the buffer
-
+        Long gameId = GameValidator.getGameId(scanner);
         String name = GameValidator.getGameName(scanner);
         int difficulty = GameValidator.getDifficulty(scanner);
         int averageDuration = GameValidator.getAverageDuration(scanner);
 
-        if (gameService.updateGame(gameId, name, difficulty, averageDuration)) {
-            System.out.println("Game updated successfully.");
-        } else {
-            System.out.println("Game update failed.");
-        }
+        boolean success = gameService.updateGame(gameId, name, difficulty, averageDuration);
+        System.out.println(success ? "Game updated successfully." : "Game update failed.");
     }
-
 }

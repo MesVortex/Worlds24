@@ -35,7 +35,7 @@ public class Tournament {
     @Column(name = "number_of_spectators")
     private int numberOfSpectators;
 
-    @OneToMany(mappedBy = "tournament", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "tournament", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Team> teams;
 
     @Column(name = "estimated_duration")

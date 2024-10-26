@@ -1,5 +1,6 @@
 package org.esports.Service;
 
+import org.esports.Model.Player;
 import org.esports.Model.Team;
 import org.esports.Repository.Interface.TeamRepository;
 
@@ -37,9 +38,38 @@ public class TeamService {
         return teamRepository.updateTeam(existingTeam);
     }
 
-    public boolean deleteTeam(Long id) {
-        return teamRepository.deleteTeam(id);
+    public boolean addPlayerToTeam(Long teamId, Player player) {
+        Team team = teamRepository.getTeam(teamId);
+
+        if (team == null) {
+            System.out.println("Team not found.");
+            return false;
+        }
+
+        team.getPlayers().add(player);
+        player.setTeam(team);
+
+        return teamRepository.updateTeam(team);
     }
+
+    public boolean removePlayerFromTeam(Long teamId, Player player) {
+        Team team = teamRepository.getTeam(teamId);
+
+        if (team == null) {
+            System.out.println("Team not found.");
+            return false;
+        }
+
+        if (!team.getPlayers().remove(player)) {
+            System.out.println("Player is not part of this team.");
+            return false;
+        }
+
+        player.setTeam(null);
+
+        return teamRepository.updateTeam(team);
+    }
+
 
     public Team getTeam(Long id) {
         return teamRepository.getTeam(id);

@@ -25,7 +25,7 @@ public class Team {
     @JoinColumn(name = "tournamentID")
     private Tournament tournament;
 
-    @OneToMany(mappedBy = "team", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "team", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private List<Player> players;
 
     public Team() {
