@@ -2,20 +2,20 @@ package org.esports.Repository.Impl;
 
 import org.esports.Model.Player;
 import org.esports.Repository.Interface.PlayerRepository;
+import org.esports.Utility.JPAUtil;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 public class PlayerRepositoryImpl implements PlayerRepository {
-    private final EntityManagerFactory entityManagerFactory;
+    private final JPAUtil jpaUtil;
 
-    public PlayerRepositoryImpl(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
+    public PlayerRepositoryImpl(JPAUtil jpaUtil) {
+        this.jpaUtil = jpaUtil;
     }
 
     private EntityManager getEntityManager() {
-        return entityManagerFactory.createEntityManager();
+        return jpaUtil.getEntityManager();
     }
 
     @Override
@@ -25,10 +25,10 @@ public class PlayerRepositoryImpl implements PlayerRepository {
             em.getTransaction().begin();
             em.persist(player);
             em.getTransaction().commit();
-            return true; // Success
+            return true;
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            return false; // Failure
+            return false;
         } finally {
             em.close();
         }
@@ -41,10 +41,10 @@ public class PlayerRepositoryImpl implements PlayerRepository {
             em.getTransaction().begin();
             em.merge(player);
             em.getTransaction().commit();
-            return true; // Success
+            return true;
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            return false; // Failure
+            return false;
         } finally {
             em.close();
         }
@@ -59,14 +59,14 @@ public class PlayerRepositoryImpl implements PlayerRepository {
             if (player != null) {
                 em.remove(player);
                 em.getTransaction().commit();
-                return true; // Success
+                return true;
             } else {
                 em.getTransaction().rollback();
-                return false; // Player not found
+                return false;
             }
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            return false; // Failure
+            return false;
         } finally {
             em.close();
         }
@@ -91,5 +91,4 @@ public class PlayerRepositoryImpl implements PlayerRepository {
             em.close();
         }
     }
-
 }

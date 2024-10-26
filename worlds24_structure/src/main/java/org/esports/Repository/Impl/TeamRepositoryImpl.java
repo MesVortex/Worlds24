@@ -2,20 +2,20 @@ package org.esports.Repository.Impl;
 
 import org.esports.Model.Team;
 import org.esports.Repository.Interface.TeamRepository;
+import org.esports.Utility.JPAUtil;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 public class TeamRepositoryImpl implements TeamRepository {
-    private final EntityManagerFactory entityManagerFactory;
+    private final JPAUtil jpaUtil;
 
-    public TeamRepositoryImpl(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
+    public TeamRepositoryImpl(JPAUtil jpaUtil) {
+        this.jpaUtil = jpaUtil;
     }
 
     private EntityManager getEntityManager() {
-        return entityManagerFactory.createEntityManager();
+        return jpaUtil.getEntityManager();
     }
 
     @Override
@@ -25,10 +25,10 @@ public class TeamRepositoryImpl implements TeamRepository {
             em.getTransaction().begin();
             em.persist(team);
             em.getTransaction().commit();
-            return true; // Success
+            return true;
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            return false; // Failure
+            return false;
         } finally {
             em.close();
         }
@@ -41,10 +41,10 @@ public class TeamRepositoryImpl implements TeamRepository {
             em.getTransaction().begin();
             em.merge(team);
             em.getTransaction().commit();
-            return true; // Success
+            return true;
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            return false; // Failure
+            return false;
         } finally {
             em.close();
         }
@@ -59,14 +59,14 @@ public class TeamRepositoryImpl implements TeamRepository {
             if (team != null) {
                 em.remove(team);
                 em.getTransaction().commit();
-                return true; // Success
+                return true;
             } else {
                 em.getTransaction().rollback();
-                return false; // Team not found
+                return false;
             }
         } catch (RuntimeException e) {
             em.getTransaction().rollback();
-            return false; // Failure
+            return false;
         } finally {
             em.close();
         }

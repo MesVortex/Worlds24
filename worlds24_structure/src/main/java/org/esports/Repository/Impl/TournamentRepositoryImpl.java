@@ -2,20 +2,20 @@ package org.esports.Repository.Impl;
 
 import org.esports.Model.Tournament;
 import org.esports.Repository.Interface.TournamentRepository;
+import org.esports.Utility.JPAUtil;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 public class TournamentRepositoryImpl implements TournamentRepository {
-    private final EntityManagerFactory entityManagerFactory;
+    private final JPAUtil jpaUtil;
 
-    public TournamentRepositoryImpl(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
+    public TournamentRepositoryImpl(JPAUtil jpaUtil) {
+        this.jpaUtil = jpaUtil;
     }
 
     private EntityManager getEntityManager() {
-        return entityManagerFactory.createEntityManager();
+        return jpaUtil.getEntityManager();
     }
 
     @Override
@@ -91,5 +91,4 @@ public class TournamentRepositoryImpl implements TournamentRepository {
             em.close();
         }
     }
-
 }

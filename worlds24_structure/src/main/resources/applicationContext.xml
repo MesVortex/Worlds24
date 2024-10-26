@@ -51,18 +51,23 @@
     <bean id="team" class="org.esports.Model.Team"/>
     <bean id="tournament" class="org.esports.Model.Tournament"/>
 
+<!--    Utility beans-->
+    <bean id="jpaUtil" class="org.esports.Utility.JPAUtil">
+        <constructor-arg ref="entityManagerFactory"/>
+    </bean>
+
     <!-- Repository beans -->
     <bean id="playerRepository" class="org.esports.Repository.Impl.PlayerRepositoryImpl">
-        <constructor-arg ref="entityManagerFactory"/>
+        <constructor-arg ref="jpaUtil"/>
     </bean>
     <bean id="gameRepository" class="org.esports.Repository.Impl.GameRepositoryImpl">
-        <constructor-arg ref="entityManagerFactory"/>
+        <constructor-arg ref="jpaUtil"/>
     </bean>
     <bean id="teamRepository" class="org.esports.Repository.Impl.TeamRepositoryImpl">
-        <constructor-arg ref="entityManagerFactory"/>
+        <constructor-arg ref="jpaUtil"/>
     </bean>
     <bean id="tournamentRepository" class="org.esports.Repository.Impl.TournamentRepositoryImpl">
-        <constructor-arg ref="entityManagerFactory"/>
+        <constructor-arg ref="jpaUtil"/>
     </bean>
 
     <!-- Service beans -->
