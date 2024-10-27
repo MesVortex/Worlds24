@@ -8,5 +8,4 @@ public interface GameRepository {
     Game findById(Long id);
     List<Game> findAll();
     boolean update(Game game);
-    boolean delete(Long id);
 }

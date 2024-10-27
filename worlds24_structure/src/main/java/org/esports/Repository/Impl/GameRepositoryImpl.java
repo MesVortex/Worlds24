@@ -71,26 +71,4 @@ public class GameRepositoryImpl implements GameRepository {
             em.close();
         }
     }
-
-    @Override
-    public boolean delete(Long id) {
-        EntityManager em = getEntityManager();
-        try {
-            em.getTransaction().begin();
-            Game game = em.find(Game.class, id);
-            if (game != null) {
-                em.remove(game);
-                em.getTransaction().commit();
-                return true;
-            } else {
-                em.getTransaction().rollback();
-                return false;
-            }
-        } catch (RuntimeException e) {
-            em.getTransaction().rollback();
-            return false;
-        } finally {
-            em.close();
-        }
-    }
 }

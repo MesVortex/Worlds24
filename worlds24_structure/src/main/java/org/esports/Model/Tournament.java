@@ -9,9 +9,13 @@ import javax.validation.constraints.FutureOrPresent;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Entity
 @Table(name = "tournaments")
 public class Tournament {
+    private static final Logger logger = LoggerFactory.getLogger(Tournament.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -148,24 +152,24 @@ public class Tournament {
     }
 
     public void showDetails() {
-        System.out.println("Tournament ID: " + id);
-        System.out.println("Title: " + title);
-        System.out.println("Game: " + game.getName());
-        System.out.println("Start Date: " + startDate);
-        System.out.println("End Date: " + endDate);
-        System.out.println("Number of Spectators: " + numberOfSpectators);
-        System.out.println("Estimated Duration: " + estimatedDuration + " minutes");
-        System.out.println("Break Between Games: " + breakBetweenGames + " minutes");
-        System.out.println("Ceremony Time: " + ceremonyTime + " minutes");
-        System.out.println("Status: " + status);
-        System.out.println("Teams:");
+        logger.info("Tournament ID: {}", id);
+        logger.info("Title: {}", title);
+        logger.info("Game: {}", game.getName());
+        logger.info("Start Date: {}", startDate);
+        logger.info("End Date: {}", endDate);
+        logger.info("Number of Spectators: {}", numberOfSpectators);
+        logger.info("Estimated Duration: {} minutes", estimatedDuration);
+        logger.info("Break Between Games: {} minutes", breakBetweenGames);
+        logger.info("Ceremony Time: {} minutes", ceremonyTime);
+        logger.info("Status: {}", status);
+        logger.info("Teams:");
 
         if (teams != null && !teams.isEmpty()) {
             for (Team team : teams) {
-                System.out.println(" - Team Name: " + team.getName() + " (Ranking: " + team.getRanking() + ")");
+                logger.info(" - Team Name: {} (Ranking: {})", team.getName(), team.getRanking());
             }
         } else {
-            System.out.println(" No teams assigned to this tournament.");
+            logger.info(" No teams assigned to this tournament.");
         }
     }
 

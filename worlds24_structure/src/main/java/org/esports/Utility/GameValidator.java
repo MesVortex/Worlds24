@@ -1,20 +1,25 @@
 package org.esports.Utility;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class GameValidator {
+
+    private static final Logger logger = LoggerFactory.getLogger(GameValidator.class);
 
     public static Long getGameId(Scanner scanner) {
         Long gameId = null;
         boolean validInput = false;
         while (!validInput) {
             try {
-                System.out.print("Enter the ID of the game: ");
+                logger.info("Enter the ID of the game: ");
                 gameId = scanner.nextLong();
                 validInput = true;
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input! Please enter a valid game ID (number).");
+                logger.warn("Invalid input! Please enter a valid game ID (number).");
                 scanner.next(); // Clear invalid input
             }
         }
@@ -24,7 +29,7 @@ public class GameValidator {
     public static String getGameName(Scanner scanner) {
         String name;
         do {
-            System.out.print("Enter game name (1-100 characters): ");
+            logger.info("Enter game name (1-100 characters): ");
             name = scanner.nextLine();
         } while (name.isEmpty() || name.length() > 100);
         return name;
@@ -33,10 +38,10 @@ public class GameValidator {
     public static int getDifficulty(Scanner scanner) {
         while (true) {
             try {
-                System.out.print("Enter game difficulty (e.g., 1-10): ");
+                logger.info("Enter game difficulty (e.g., 1-10): ");
                 return Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter an integer for difficulty.");
+                logger.warn("Invalid input. Please enter an integer for difficulty.");
             }
         }
     }
@@ -44,10 +49,10 @@ public class GameValidator {
     public static int getAverageDuration(Scanner scanner) {
         while (true) {
             try {
-                System.out.print("Enter average duration (in minutes): ");
+                logger.info("Enter average duration (in minutes): ");
                 return Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter an integer for duration.");
+                logger.warn("Invalid input. Please enter an integer for duration.");
             }
         }
     }

@@ -51,28 +51,6 @@ public class TeamRepositoryImpl implements TeamRepository {
     }
 
     @Override
-    public boolean deleteTeam(Long id) {
-        EntityManager em = getEntityManager();
-        try {
-            em.getTransaction().begin();
-            Team team = em.find(Team.class, id);
-            if (team != null) {
-                em.remove(team);
-                em.getTransaction().commit();
-                return true;
-            } else {
-                em.getTransaction().rollback();
-                return false;
-            }
-        } catch (RuntimeException e) {
-            em.getTransaction().rollback();
-            return false;
-        } finally {
-            em.close();
-        }
-    }
-
-    @Override
     public Team getTeam(Long id) {
         EntityManager em = getEntityManager();
         try {

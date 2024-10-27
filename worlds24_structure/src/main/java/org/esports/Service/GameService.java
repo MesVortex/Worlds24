@@ -2,11 +2,14 @@ package org.esports.Service;
 
 import org.esports.Model.Game;
 import org.esports.Repository.Interface.GameRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class GameService {
 
+    private static final Logger logger = LoggerFactory.getLogger(GameService.class);
     private final GameRepository gameRepository;
     private Game game;
 
@@ -34,7 +37,7 @@ public class GameService {
     public boolean updateGame(Long gameId, String name, int difficulty, int averageDuration) {
         Game existingGame = gameRepository.findById(gameId);
         if (existingGame == null) {
-            System.out.println("Game not found!");
+            logger.warn("Game with ID {} not found!", gameId);
             return false;
         }
 
@@ -44,9 +47,4 @@ public class GameService {
 
         return gameRepository.update(existingGame);
     }
-
-    public boolean removeGame(Long id) {
-        return gameRepository.delete(id);
-    }
-
 }

@@ -19,7 +19,11 @@ import org.esports.Utility.PlayerValidator;
 import org.esports.Utility.TeamValidator;
 import org.esports.Utility.TournamentValidator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ConsoleUI {
+    private static final Logger logger = LoggerFactory.getLogger(ConsoleUI.class);
     private final GameService gameService;
     private final PlayerService playerService;
     private final TeamService teamService;
@@ -36,13 +40,13 @@ public class ConsoleUI {
     private int getMenuSelection(String prompt, int max) {
         while (true) {
             try {
-                System.out.println(prompt);
+                logger.info(prompt); // Log the menu prompt
                 int choice = scanner.nextInt();
                 scanner.nextLine(); // Clear buffer
                 if (choice >= 1 && choice <= max) return choice;
-                System.out.println("Please choose a valid option.");
+                logger.warn("Please choose a valid option.");
             } catch (InputMismatchException e) {
-                System.out.println("Please enter a valid number.");
+                logger.error("Please enter a valid number.");
                 scanner.next();
             }
         }
@@ -72,10 +76,10 @@ public class ConsoleUI {
                     manageGames();
                     break;
                 case 5:
-                    System.out.println("Exiting the application. Goodbye!");
+                    logger.info("Exiting the application. Goodbye!");
                     return;
                 default:
-                    System.out.println("Invalid option.");
+                    logger.warn("Invalid option.");
                     break;
             }
         }
@@ -86,8 +90,9 @@ public class ConsoleUI {
                 "1. Create Player\n" +
                 "2. Update Player\n" +
                 "3. Delete Player\n" +
-                "4. Show Player Details";
-        int choice = getMenuSelection(playerMenu, 4);
+                "4. Show Player Details\n" +
+                "5. Show All Players";
+        int choice = getMenuSelection(playerMenu, 5);
 
         switch (choice) {
             case 1:
@@ -102,8 +107,11 @@ public class ConsoleUI {
             case 4:
                 showPlayerDetails();
                 break;
+            case 5:
+                showAllPlayers();
+                break;
             default:
-                System.out.println("Invalid option.");
+                logger.warn("Invalid option.");
         }
     }
 
@@ -137,7 +145,7 @@ public class ConsoleUI {
                 viewTeam();
                 break;
             default:
-                System.out.println("Invalid option.");
+                logger.warn("Invalid option.");
                 break;
         }
     }
@@ -176,7 +184,7 @@ public class ConsoleUI {
                 viewTournament();
                 break;
             default:
-                System.out.println("Invalid option.");
+                logger.warn("Invalid option.");
                 break;
         }
     }
@@ -199,7 +207,7 @@ public class ConsoleUI {
                 viewGame();
                 break;
             default:
-                System.out.println("Invalid option.");
+                logger.warn("Invalid option.");
                 break;
         }
     }
@@ -209,7 +217,7 @@ public class ConsoleUI {
         int age = PlayerValidator.getPlayerAge(scanner);
 
         boolean success = playerService.addPlayer(name, age);
-        System.out.println(success ? "Player created successfully." : "Player creation failed.");
+        logger.info(success ? "Player created successfully." : "Player creation failed.");
     }
 
     private void updatePlayer() {
@@ -218,14 +226,14 @@ public class ConsoleUI {
         int updatedAge = PlayerValidator.getPlayerAge(scanner);
 
         boolean success = playerService.updatePlayer(playerId, updatedName, updatedAge);
-        System.out.println(success ? "Player updated successfully." : "Player update failed.");
+        logger.info(success ? "Player updated successfully." : "Player update failed.");
     }
 
     private void deletePlayer() {
         Long playerId = PlayerValidator.getPlayerId(scanner);
 
         boolean success = playerService.deletePlayer(playerId);
-        System.out.println(success ? "Player deleted successfully." : "Player deletion failed. Player not found.");
+        logger.info(success ? "Player deleted successfully." : "Player deletion failed. Player not found.");
     }
 
     private void showPlayerDetails() {
@@ -234,7 +242,19 @@ public class ConsoleUI {
         if (player != null) {
             player.showDetails();
         } else {
-            System.out.println("Player not found.");
+            logger.warn("Player not found.");
+        }
+    }
+
+    private void showAllPlayers() {
+        List<Player> players = playerService.getPlayers();
+        if (players.isEmpty()) {
+            logger.info("No players found.");
+        } else {
+            logger.info("List of Players:");
+            for (Player player : players) {
+                player.showDetails();
+            }
         }
     }
 
@@ -243,7 +263,7 @@ public class ConsoleUI {
         int ranking = TeamValidator.getTeamRanking(scanner);
 
         boolean success = teamService.addTeam(name, ranking);
-        System.out.println(success ? "Team created successfully." : "Team creation failed.");
+        logger.info(success ? "Team created successfully." : "Team creation failed.");
     }
 
     private void updateTeam() {
@@ -252,7 +272,7 @@ public class ConsoleUI {
         int updatedRanking = TeamValidator.getTeamRanking(scanner);
 
         boolean success = teamService.updateTeam(teamId, updatedName, updatedRanking);
-        System.out.println(success ? "Team updated successfully." : "Team update failed.");
+        logger.info(success ? "Team updated successfully." : "Team update failed.");
     }
 
     private void addPlayerToTeam() {
@@ -262,12 +282,12 @@ public class ConsoleUI {
         Player player = playerService.getPlayer(playerId);
 
         if (player == null) {
-            System.out.println("Player with the specified ID does not exist.");
+            logger.warn("Player with the specified ID does not exist.");
             return;
         }
 
         boolean success = teamService.addPlayerToTeam(teamId, player);
-        System.out.println(success ? "Player added to team successfully." : "Failed to add player to team.");
+        logger.info(success ? "Player added to team successfully." : "Failed to add player to team.");
     }
 
     private void removePlayerFromTeam() {
@@ -277,22 +297,22 @@ public class ConsoleUI {
         Player player = playerService.getPlayer(playerId);
 
         if (player == null) {
-            System.out.println("Player with the specified ID does not exist.");
+            logger.warn("Player with the specified ID does not exist.");
             return;
         }
 
         boolean success = teamService.removePlayerFromTeam(teamId, player);
-        System.out.println(success ? "Player removed from team successfully." : "Failed to remove player from team.");
+        logger.info(success ? "Player removed from team successfully." : "Failed to remove player from team.");
     }
 
     private void viewAllTeams() {
         List<Team> teams = teamService.getTeams();
         if (teams.isEmpty()) {
-            System.out.println("No teams available.");
+            logger.info("No teams available.");
         } else {
             for (Team team : teams) {
                 team.showDetails();
-                System.out.println("-----------");
+                logger.info("-----------");
             }
         }
     }
@@ -304,7 +324,7 @@ public class ConsoleUI {
         if (team != null) {
             team.showDetails();
         } else {
-            System.out.println("Team with ID " + teamId + " not found.");
+            logger.warn("Team with ID {} not found.", teamId);
         }
     }
 
@@ -314,9 +334,10 @@ public class ConsoleUI {
         Game game = gameService.getGame(gameId);
 
         if (game == null) {
-            System.out.println("Game with the specified ID does not exist.");
+            logger.warn("Game with the specified ID does not exist.");
             return;
         }
+
         String title = TournamentValidator.getTournamentTitle(scanner);
         LocalDate startDate = TournamentValidator.getTournamentStartDate(scanner);
         LocalDate endDate = TournamentValidator.getTournamentEndDate(scanner);
@@ -330,7 +351,7 @@ public class ConsoleUI {
                 title, startDate, endDate, numberOfSpectators, estimatedDuration,
                 breakBetweenGames, ceremonyTime, status, game
         );
-        System.out.println(success ? "Tournament created successfully." : "Tournament creation failed.");
+        logger.info(success ? "Tournament created successfully." : "Tournament creation failed.");
     }
 
     private void updateTournament() {
@@ -345,7 +366,7 @@ public class ConsoleUI {
         TournamentStatus updatedStatus = TournamentValidator.getTournamentStatus(scanner);
 
         boolean success = tournamentService.updateTournament(tournamentId, updatedTitle, updatedStartDate, updatedEndDate, updatedNumberOfSpectators, updatedEstimatedDuration, updatedBreakBetweenGames, updatedCeremonyTime, updatedStatus);
-        System.out.println(success ? "Tournament updated successfully." : "Tournament update failed.");
+        logger.info(success ? "Tournament updated successfully." : "Tournament update failed.");
     }
 
     private void addTeamToTournament() {
@@ -355,12 +376,12 @@ public class ConsoleUI {
         Team team = teamService.getTeam(teamId);
 
         if (team == null) {
-            System.out.println("Team with the specified ID does not exist.");
+            logger.warn("Team with the specified ID does not exist.");
             return;
         }
 
         boolean success = tournamentService.addTeamToTournament(tournamentId, team);
-        System.out.println(success ? "Team added to tournament successfully." : "Failed to add team to tournament.");
+        logger.info(success ? "Team added to tournament successfully." : "Failed to add team to tournament.");
     }
 
     private void removeTeamFromTournament() {
@@ -370,12 +391,12 @@ public class ConsoleUI {
         Team team = teamService.getTeam(teamId);
 
         if (team == null) {
-            System.out.println("Team with the specified ID does not exist.");
+            logger.warn("Team with the specified ID does not exist.");
             return;
         }
 
         boolean success = tournamentService.removeTeamFromTournament(tournamentId, team);
-        System.out.println(success ? "Team removed from tournament successfully." : "Failed to remove team from tournament.");
+        logger.info(success ? "Team removed from tournament successfully." : "Failed to remove team from tournament.");
     }
 
     private void calculateEstimatedDuration() {
@@ -384,17 +405,17 @@ public class ConsoleUI {
         int hours = estimatedDurationMinutes / 60;
         int minutes = estimatedDurationMinutes % 60;
 
-        System.out.println("Estimated Tournament Duration: " + estimatedDurationMinutes + " minutes (" + hours + " hours and " + minutes + " minutes).");
+        logger.info("Estimated Tournament Duration: {} minutes ({} hours and {} minutes).", estimatedDurationMinutes, hours, minutes);
     }
 
     private void viewAllTournaments() {
         List<Tournament> tournaments = tournamentService.getTournaments();
         if (tournaments.isEmpty()) {
-            System.out.println("No tournaments available.");
+            logger.info("No tournaments available.");
         } else {
             for (Tournament tournament : tournaments) {
                 tournament.showDetails();
-                System.out.println("-----------");
+                logger.info("-----------");
             }
         }
     }
@@ -406,7 +427,7 @@ public class ConsoleUI {
         if (tournament != null) {
             tournament.showDetails();
         } else {
-            System.out.println("Tournament with ID " + tournamentId + " not found.");
+            logger.warn("Tournament with ID {} not found.", tournamentId);
         }
     }
 
@@ -416,7 +437,11 @@ public class ConsoleUI {
         int averageDuration = GameValidator.getAverageDuration(scanner);
 
         boolean success = gameService.addGame(name, difficulty, averageDuration);
-        System.out.println(success ? "Game created successfully." : "Game creation failed.");
+        if (success) {
+            logger.info("Game created successfully.");
+        } else {
+            logger.error("Game creation failed.");
+        }
     }
 
     private void updateGame() {
@@ -426,17 +451,21 @@ public class ConsoleUI {
         int averageDuration = GameValidator.getAverageDuration(scanner);
 
         boolean success = gameService.updateGame(gameId, name, difficulty, averageDuration);
-        System.out.println(success ? "Game updated successfully." : "Game update failed.");
+        if (success) {
+            logger.info("Game updated successfully.");
+        } else {
+            logger.error("Game update failed.");
+        }
     }
 
     private void viewAllGames() {
         List<Game> games = gameService.getAllGames();
         if (games.isEmpty()) {
-            System.out.println("No games available.");
+            logger.info("No games available.");
         } else {
             for (Game game : games) {
                 game.showDetails();
-                System.out.println("-----------");
+                logger.info("-----------"); // If you want to log the separator
             }
         }
     }
@@ -448,7 +477,7 @@ public class ConsoleUI {
         if (game != null) {
             game.showDetails();
         } else {
-            System.out.println("Game with ID " + gameId + " not found.");
+            logger.warn("Game with ID {} not found.", gameId);
         }
     }
 }

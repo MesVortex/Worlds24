@@ -5,9 +5,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.validation.constraints.Min;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Entity
 @Table(name = "players")
 public class Player {
+    private static final Logger logger = LoggerFactory.getLogger(Player.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,12 +72,12 @@ public class Player {
     }
 
     public void showDetails() {
-        System.out.println("Nickname: " + nickname);
-        System.out.println("Age: " + age);
+        logger.info("Nickname: {}", nickname);
+        logger.info("Age: {}", age);
         if (team != null) {
-            System.out.println("Team: " + team.getName());
+            logger.info("Team: {}", team.getName());
         } else {
-            System.out.println("No team assigned.");
+            logger.info("No team assigned.");
         }
     }
 

@@ -5,9 +5,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Entity
 @Table(name = "games")
 public class Game {
+    private static final Logger logger = LoggerFactory.getLogger(Game.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,18 +75,19 @@ public class Game {
     }
 
     public void showDetails() {
-        System.out.println("Game ID: " + id);
-        System.out.println("Name: " + name);
-        System.out.println("Difficulty: " + difficulty);
-        System.out.println("Average Duration: " + averageDuration + " minutes");
-        System.out.println("Tournaments:");
+        logger.info("Game ID: {}", id);
+        logger.info("Name: {}", name);
+        logger.info("Difficulty: {}", difficulty);
+        logger.info("Average Duration: {} minutes", averageDuration);
+        logger.info("Tournaments:");
 
         if (tournaments != null && !tournaments.isEmpty()) {
             for (Tournament tournament : tournaments) {
-                System.out.println(" - Tournament Title: " + tournament.getTitle() + " (ID: " + tournament.getId() + ", Start Date: "+ tournament.getStartDate() +")");
+                logger.info(" - Tournament Title: {} (ID: {}, Start Date: {})",
+                        tournament.getTitle(), tournament.getId(), tournament.getStartDate());
             }
         } else {
-            System.out.println(" No tournaments associated with this game.");
+            logger.info(" No tournaments associated with this game.");
         }
     }
 

@@ -5,9 +5,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Entity
 @Table(name = "teams")
 public class Team {
+    private static final Logger logger = LoggerFactory.getLogger(Team.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,16 +77,17 @@ public class Team {
     }
 
     public void showDetails() {
-        System.out.println("Team ID: " + id);
-        System.out.println("Name: " + name);
-        System.out.println("Ranking: " + ranking);
-        System.out.println("Players:");
+        logger.info("Team ID: {}", id);
+        logger.info("Name: {}", name);
+        logger.info("Ranking: {}", ranking);
+        logger.info("Players:");
+
         if (players != null && !players.isEmpty()) {
             for (Player player : players) {
-                System.out.println(" - " + player.getNickname() + " (ID: " + player.getId() + ", Age: " + player.getAge() + ")");
+                logger.info(" - {} (ID: {}, Age: {})", player.getNickname(), player.getId(), player.getAge());
             }
         } else {
-            System.out.println(" No players in this team.");
+            logger.info(" No players in this team.");
         }
     }
 

@@ -5,11 +5,14 @@ import org.esports.Model.Game;
 import org.esports.Model.Team;
 import org.esports.Model.Tournament;
 import org.esports.Repository.Interface.TournamentRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class TournamentService {
+    private static final Logger logger = LoggerFactory.getLogger(TournamentService.class);
     private final TournamentRepository tournamentRepository;
     private Tournament tournament;
 
@@ -35,11 +38,12 @@ public class TournamentService {
         return tournamentRepository.addTournament(tournament);
     }
 
-
-    public boolean updateTournament(Long tournamentId, String title, LocalDate startDate, LocalDate endDate, int numberOfSpectators, int estimatedDuration, int breakBetweenGames, int ceremonyTime, TournamentStatus status) {
+    public boolean updateTournament(Long tournamentId, String title, LocalDate startDate, LocalDate endDate,
+                                    int numberOfSpectators, int estimatedDuration, int breakBetweenGames,
+                                    int ceremonyTime, TournamentStatus status) {
         Tournament existingTournament = tournamentRepository.getTournament(tournamentId);
         if (existingTournament == null) {
-            System.out.println("Tournament not found!");
+            logger.warn("Tournament with ID {} not found!", tournamentId);
             return false;
         }
 
@@ -58,7 +62,7 @@ public class TournamentService {
     public boolean addTeamToTournament(Long tournamentId, Team team) {
         Tournament tournament = tournamentRepository.getTournament(tournamentId);
         if (tournament == null) {
-            System.out.println("Tournament not found.");
+            logger.warn("Tournament with ID {} not found.", tournamentId);
             return false;
         }
 
@@ -71,12 +75,12 @@ public class TournamentService {
     public boolean removeTeamFromTournament(Long tournamentId, Team team) {
         Tournament tournament = tournamentRepository.getTournament(tournamentId);
         if (tournament == null) {
-            System.out.println("Tournament not found.");
+            logger.warn("Tournament with ID {} not found.", tournamentId);
             return false;
         }
 
         if (!tournament.getTeams().remove(team)) {
-            System.out.println("Team is not part of this tournament.");
+            logger.warn("Team {} is not part of tournament {}", team.getName(), tournament.getTitle());
             return false;
         }
 
@@ -96,5 +100,4 @@ public class TournamentService {
     public int getEstimatedDuration(Long tournamentId) {
         return tournamentRepository.calculateEstimatedDuration(tournamentId);
     }
-
 }

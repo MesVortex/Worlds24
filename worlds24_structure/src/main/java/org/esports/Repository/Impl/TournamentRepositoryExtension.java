@@ -51,28 +51,6 @@ public class TournamentRepositoryExtension implements TournamentRepository {
     }
 
     @Override
-    public boolean deleteTournament(Long id) {
-        EntityManager em = getEntityManager();
-        try {
-            em.getTransaction().begin();
-            Tournament tournament = em.find(Tournament.class, id);
-            if (tournament != null) {
-                em.remove(tournament);
-                em.getTransaction().commit();
-                return true; // Success
-            } else {
-                em.getTransaction().rollback();
-                return false; // Tournament not found
-            }
-        } catch (RuntimeException e) {
-            em.getTransaction().rollback();
-            return false; // Failure
-        } finally {
-            em.close();
-        }
-    }
-
-    @Override
     public Tournament getTournament(Long id) {
         EntityManager em = getEntityManager();
         try {
