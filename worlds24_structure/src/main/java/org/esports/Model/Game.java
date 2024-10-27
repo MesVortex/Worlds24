@@ -24,7 +24,7 @@ public class Game {
     @Column(name = "average_duration")
     private int averageDuration;
 
-    @OneToMany(mappedBy = "game", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "game", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     private List<Tournament> tournaments;
 
     public Game() {
@@ -68,6 +68,22 @@ public class Game {
 
     public void setTournaments(List<Tournament> tournaments) {
         this.tournaments = tournaments;
+    }
+
+    public void showDetails() {
+        System.out.println("Game ID: " + id);
+        System.out.println("Name: " + name);
+        System.out.println("Difficulty: " + difficulty);
+        System.out.println("Average Duration: " + averageDuration + " minutes");
+        System.out.println("Tournaments:");
+
+        if (tournaments != null && !tournaments.isEmpty()) {
+            for (Tournament tournament : tournaments) {
+                System.out.println(" - Tournament Title: " + tournament.getTitle() + " (ID: " + tournament.getId() + ", Start Date: "+ tournament.getStartDate() +")");
+            }
+        } else {
+            System.out.println(" No tournaments associated with this game.");
+        }
     }
 
     @Override

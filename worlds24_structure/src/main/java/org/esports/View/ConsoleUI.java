@@ -47,6 +47,7 @@ public class ConsoleUI {
             }
         }
     }
+
     public void showMenu() {
         while (true) {
             String menuPrompt = "Select an option:\n" +
@@ -172,10 +173,9 @@ public class ConsoleUI {
         }
     }
 
-
     private void manageGames() {
-        String gameMenu = "Game Management:\n1. Create Game\n2. Update Game";
-        int choice = getMenuSelection(gameMenu, 2);
+        String gameMenu = "Game Management:\n1. Create Game\n2. Update Game\n3. View All Games";
+        int choice = getMenuSelection(gameMenu, 3);
 
         switch (choice) {
             case 1:
@@ -183,6 +183,9 @@ public class ConsoleUI {
                 break;
             case 2:
                 updateGame();
+                break;
+            case 3:
+                viewAllGames();
                 break;
             default:
                 System.out.println("Invalid option.");
@@ -197,7 +200,6 @@ public class ConsoleUI {
         boolean success = playerService.addPlayer(name, age);
         System.out.println(success ? "Player created successfully." : "Player creation failed.");
     }
-
 
     private void updatePlayer() {
         Long playerId = PlayerValidator.getPlayerId(scanner);
@@ -309,7 +311,6 @@ public class ConsoleUI {
         System.out.println(success ? "Tournament created successfully." : "Tournament creation failed.");
     }
 
-
     private void updateTournament() {
         Long tournamentId = TournamentValidator.getTournamentId(scanner);
         String updatedTitle = TournamentValidator.getTournamentTitle(scanner);
@@ -376,7 +377,6 @@ public class ConsoleUI {
         }
     }
 
-
     private void createGame() {
         String name = GameValidator.getGameName(scanner);
         int difficulty = GameValidator.getDifficulty(scanner);
@@ -394,5 +394,17 @@ public class ConsoleUI {
 
         boolean success = gameService.updateGame(gameId, name, difficulty, averageDuration);
         System.out.println(success ? "Game updated successfully." : "Game update failed.");
+    }
+
+    private void viewAllGames() {
+        List<Game> games = gameService.getAllGames();
+        if (games.isEmpty()) {
+            System.out.println("No games available.");
+        } else {
+            for (Game game : games) {
+                game.showDetails();
+                System.out.println("-----------");
+            }
+        }
     }
 }
