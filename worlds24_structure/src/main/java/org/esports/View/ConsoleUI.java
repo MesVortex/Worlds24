@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import org.esports.Model.Enum.TournamentStatus;
 import org.esports.Model.Player;
+import org.esports.Model.Team;
 import org.esports.Service.GameService;
 import org.esports.Service.PlayerService;
 import org.esports.Service.TeamService;
@@ -120,8 +121,12 @@ public class ConsoleUI {
     }
 
     private void manageTournaments() {
-        String tournamentMenu = "Tournament Management:\n1. Create Tournament\n2. Update Tournament";
-        int choice = getMenuSelection(tournamentMenu, 2);
+        String tournamentMenu = "Tournament Management:\n" +
+                "1. Create Tournament\n" +
+                "2. Update Tournament\n" +
+                "3. Add Team to Tournament\n" +
+                "4. Remove Team from Tournament";
+        int choice = getMenuSelection(tournamentMenu, 4);
 
         switch (choice) {
             case 1:
@@ -130,11 +135,18 @@ public class ConsoleUI {
             case 2:
                 updateTournament();
                 break;
+            case 3:
+                addTeamToTournament();
+                break;
+            case 4:
+                removeTeamFromTournament();
+                break;
             default:
                 System.out.println("Invalid option.");
                 break;
         }
     }
+
 
     private void manageGames() {
         String gameMenu = "Game Management:\n1. Create Game\n2. Update Game";
@@ -186,6 +198,15 @@ public class ConsoleUI {
         System.out.println(success ? "Team created successfully." : "Team creation failed.");
     }
 
+    private void updateTeam() {
+        Long teamId = TeamValidator.getTeamId(scanner);
+        String updatedName = TeamValidator.getTeamName(scanner);
+        int updatedRanking = TeamValidator.getTeamRanking(scanner);
+
+        boolean success = teamService.updateTeam(teamId, updatedName, updatedRanking);
+        System.out.println(success ? "Team updated successfully." : "Team update failed.");
+    }
+
     private void addPlayerToTeam() {
         Long teamId = TeamValidator.getTeamId(scanner);  // Get team ID
         Long playerId = PlayerValidator.getPlayerId(scanner);  // Get player ID
@@ -201,7 +222,6 @@ public class ConsoleUI {
         System.out.println(success ? "Player added to team successfully." : "Failed to add player to team.");
     }
 
-
     private void removePlayerFromTeam() {
         Long teamId = TeamValidator.getTeamId(scanner);  // Get team ID
         Long playerId = PlayerValidator.getPlayerId(scanner);  // Get player ID
@@ -215,15 +235,6 @@ public class ConsoleUI {
 
         boolean success = teamService.removePlayerFromTeam(teamId, player);
         System.out.println(success ? "Player removed from team successfully." : "Failed to remove player from team.");
-    }
-
-    private void updateTeam() {
-        Long teamId = TeamValidator.getTeamId(scanner);
-        String updatedName = TeamValidator.getTeamName(scanner);
-        int updatedRanking = TeamValidator.getTeamRanking(scanner);
-
-        boolean success = teamService.updateTeam(teamId, updatedName, updatedRanking);
-        System.out.println(success ? "Team updated successfully." : "Team update failed.");
     }
 
     private void createTournament() {
@@ -253,6 +264,36 @@ public class ConsoleUI {
 
         boolean success = tournamentService.updateTournament(tournamentId, updatedTitle, updatedStartDate, updatedEndDate, updatedNumberOfSpectators, updatedEstimatedDuration, updatedBreakBetweenGames, updatedCeremonyTime, updatedStatus);
         System.out.println(success ? "Tournament updated successfully." : "Tournament update failed.");
+    }
+
+    private void addTeamToTournament() {
+        Long tournamentId = TournamentValidator.getTournamentId(scanner);
+        Long teamId = TeamValidator.getTeamId(scanner);
+
+        Team team = teamService.getTeam(teamId);
+
+        if (team == null) {
+            System.out.println("Team with the specified ID does not exist.");
+            return;
+        }
+
+        boolean success = tournamentService.addTeamToTournament(tournamentId, team);
+        System.out.println(success ? "Team added to tournament successfully." : "Failed to add team to tournament.");
+    }
+
+    private void removeTeamFromTournament() {
+        Long tournamentId = TournamentValidator.getTournamentId(scanner);
+        Long teamId = TeamValidator.getTeamId(scanner);
+
+        Team team = teamService.getTeam(teamId);
+
+        if (team == null) {
+            System.out.println("Team with the specified ID does not exist.");
+            return;
+        }
+
+        boolean success = tournamentService.removeTeamFromTournament(tournamentId, team);  // Call the service method
+        System.out.println(success ? "Team removed from tournament successfully." : "Failed to remove team from tournament.");
     }
 
     private void createGame() {

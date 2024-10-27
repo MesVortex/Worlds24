@@ -1,6 +1,7 @@
 package org.esports.Service;
 
 import org.esports.Model.Enum.TournamentStatus;
+import org.esports.Model.Team;
 import org.esports.Model.Tournament;
 import org.esports.Repository.Interface.TournamentRepository;
 
@@ -48,8 +49,30 @@ public class TournamentService {
         return tournamentRepository.updateTournament(existingTournament);
     }
 
-    public boolean deleteTournament(Long id) {
-        return tournamentRepository.deleteTournament(id);
+    public boolean addTeamToTournament(Long tournamentId, Team team) {
+        Tournament tournament = tournamentRepository.getTournament(tournamentId);
+        if (tournament == null) {
+            System.out.println("Tournament not found.");
+            return false;
+        }
+
+        tournament.getTeams().add(team);
+        return tournamentRepository.updateTournament(tournament);
+    }
+
+    public boolean removeTeamFromTournament(Long tournamentId, Team team) {
+        Tournament tournament = tournamentRepository.getTournament(tournamentId);
+        if (tournament == null) {
+            System.out.println("Tournament not found.");
+            return false;
+        }
+
+        if (!tournament.getTeams().remove(team)) {
+            System.out.println("Team is not part of this tournament.");
+            return false;
+        }
+
+        return tournamentRepository.updateTournament(tournament);
     }
 
     public Tournament getTournament(Long id) {
