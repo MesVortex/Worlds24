@@ -64,6 +64,14 @@ public class Team {
         this.players = players;
     }
 
+    public Tournament getTournament() {
+        return tournament;
+    }
+
+    public void setTournament(Tournament tournament) {
+        this.tournament = tournament;
+    }
+
     @Override
     public String toString() {
         return "Team{" +

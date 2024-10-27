@@ -57,6 +57,8 @@ public class TournamentService {
         }
 
         tournament.getTeams().add(team);
+        team.setTournament(tournament);
+
         return tournamentRepository.updateTournament(tournament);
     }
 
@@ -71,6 +73,8 @@ public class TournamentService {
             System.out.println("Team is not part of this tournament.");
             return false;
         }
+
+        team.setTournament(null);
 
         return tournamentRepository.updateTournament(tournament);
     }

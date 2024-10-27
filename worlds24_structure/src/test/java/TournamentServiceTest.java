@@ -102,24 +102,38 @@ public class TournamentServiceTest {
     @Test
     public void testAddTeamToTournament() {
         Long tournamentId = 1L;
-        tournament.setId(tournamentId);
-        tournament.setTeams(new ArrayList<>());
+        Team team = new Team();
+        team.setId(2L);
+        team.setName("Team A");
 
-        when(tournamentRepository.getTournament(tournamentId)).thenReturn(tournament);
-        when(tournamentRepository.updateTournament(tournament)).thenReturn(true);
+        Tournament existingTournament = new Tournament();
+        existingTournament.setId(tournamentId);
+        existingTournament.setTitle("Championship Tournament");
+        existingTournament.setTeams(new ArrayList<>());
+
+        when(tournamentRepository.getTournament(tournamentId)).thenReturn(existingTournament);
+        when(tournamentRepository.updateTournament(existingTournament)).thenReturn(true);
 
         boolean result = tournamentService.addTeamToTournament(tournamentId, team);
 
         assertTrue(result);
-        assertTrue(tournament.getTeams().contains(team));
-        verify(tournamentRepository, times(1)).updateTournament(tournament);
+        assertTrue(existingTournament.getTeams().contains(team));
+        assertEquals(existingTournament, team.getTournament());
     }
+
 
     @Test
     public void testRemoveTeamFromTournament() {
         Long tournamentId = 1L;
+        Long teamId = 2L;
+        Team team = new Team();
+        team.setId(teamId);
+        team.setName("Team A");
+
+        Tournament tournament = new Tournament();
         tournament.setId(tournamentId);
         tournament.setTeams(new ArrayList<>());
+        tournament.getTeams().add(team);
 
         when(tournamentRepository.getTournament(tournamentId)).thenReturn(tournament);
         when(tournamentRepository.updateTournament(tournament)).thenReturn(true);
@@ -130,4 +144,5 @@ public class TournamentServiceTest {
         assertFalse(tournament.getTeams().contains(team));
         verify(tournamentRepository, times(1)).updateTournament(tournament);
     }
+
 }
