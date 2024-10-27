@@ -69,6 +69,9 @@
     <bean id="tournamentRepository" class="org.esports.Repository.Impl.TournamentRepositoryImpl">
         <constructor-arg ref="jpaUtil"/>
     </bean>
+    <bean id="tournamentRepositoryExtension" class="org.esports.Repository.Impl.TournamentRepositoryExtension">
+        <constructor-arg ref="jpaUtil"/>
+    </bean>
 
     <!-- Service beans -->
     <bean id="playerService" class="org.esports.Service.PlayerService">
@@ -84,7 +87,7 @@
         <constructor-arg ref="team" />
     </bean>
     <bean id="tournamentService" class="org.esports.Service.TournamentService">
-        <constructor-arg ref="tournamentRepository"/>
+        <constructor-arg ref="tournamentRepositoryExtension"/>
         <constructor-arg ref="tournament" />
     </bean>
 
