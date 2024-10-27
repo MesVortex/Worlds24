@@ -1,4 +1,5 @@
 import org.esports.Model.Enum.TournamentStatus;
+import org.esports.Model.Team;
 import org.esports.Model.Tournament;
 import org.esports.Repository.Interface.TournamentRepository;
 import org.esports.Service.TournamentService;
@@ -9,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -20,6 +22,9 @@ public class TournamentServiceTest {
 
     @Mock
     private Tournament tournament;
+
+    @Mock
+    private Team team;
 
     @InjectMocks
     private TournamentService tournamentService;
@@ -92,5 +97,37 @@ public class TournamentServiceTest {
 
         verify(tournamentRepository).getTournament(tournamentId);
         verify(tournamentRepository).updateTournament(existingTournament);
+    }
+
+    @Test
+    public void testAddTeamToTournament() {
+        Long tournamentId = 1L;
+        tournament.setId(tournamentId);
+        tournament.setTeams(new ArrayList<>());
+
+        when(tournamentRepository.getTournament(tournamentId)).thenReturn(tournament);
+        when(tournamentRepository.updateTournament(tournament)).thenReturn(true);
+
+        boolean result = tournamentService.addTeamToTournament(tournamentId, team);
+
+        assertTrue(result);
+        assertTrue(tournament.getTeams().contains(team));
+        verify(tournamentRepository, times(1)).updateTournament(tournament);
+    }
+
+    @Test
+    public void testRemoveTeamFromTournament() {
+        Long tournamentId = 1L;
+        tournament.setId(tournamentId);
+        tournament.setTeams(new ArrayList<>());
+
+        when(tournamentRepository.getTournament(tournamentId)).thenReturn(tournament);
+        when(tournamentRepository.updateTournament(tournament)).thenReturn(true);
+
+        boolean result = tournamentService.removeTeamFromTournament(tournamentId, team);
+
+        assertTrue(result);
+        assertFalse(tournament.getTeams().contains(team));
+        verify(tournamentRepository, times(1)).updateTournament(tournament);
     }
 }
