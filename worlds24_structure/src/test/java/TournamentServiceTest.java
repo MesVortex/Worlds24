@@ -153,4 +153,17 @@ public class TournamentServiceTest {
         verify(tournamentRepository, times(1)).updateTournament(tournament);
     }
 
+    @Test
+    public void testGetEstimatedDuration() {
+        Long tournamentId = 1L;
+        int expectedDuration = 240;
+
+        when(tournamentRepository.calculateEstimatedDuration(tournamentId)).thenReturn(expectedDuration);
+
+        int actualDuration = tournamentService.getEstimatedDuration(tournamentId);
+
+        assertEquals(expectedDuration, actualDuration);
+        verify(tournamentRepository, times(1)).calculateEstimatedDuration(tournamentId);
+    }
+
 }
