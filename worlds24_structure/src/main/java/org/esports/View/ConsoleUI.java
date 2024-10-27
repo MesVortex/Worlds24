@@ -113,8 +113,9 @@ public class ConsoleUI {
                 "2. Update Team\n" +
                 "3. Add player to a team\n" +
                 "4. Remove player from a team\n" +
-                "5. View All Teams";
-        int choice = getMenuSelection(teamMenu, 5);
+                "5. View All Teams\n" +
+                "6. View Individual Team";
+        int choice = getMenuSelection(teamMenu, 6);
 
         switch (choice) {
             case 1:
@@ -132,6 +133,9 @@ public class ConsoleUI {
             case 5:
                 viewAllTeams();
                 break;
+            case 6:
+                viewTeam();
+                break;
             default:
                 System.out.println("Invalid option.");
                 break;
@@ -145,8 +149,9 @@ public class ConsoleUI {
                 "3. Add Team to Tournament\n" +
                 "4. Remove Team from Tournament\n" +
                 "5. Calculate Estimated Duration\n" +
-                "6. View All Tournaments";
-        int choice = getMenuSelection(tournamentMenu, 6);
+                "6. View All Tournaments\n" +
+                "7. View Individual Tournament";
+        int choice = getMenuSelection(tournamentMenu, 7);
 
         switch (choice) {
             case 1:
@@ -167,6 +172,9 @@ public class ConsoleUI {
             case 6:
                 viewAllTournaments();
                 break;
+            case 7:
+                viewTournament();
+                break;
             default:
                 System.out.println("Invalid option.");
                 break;
@@ -174,8 +182,8 @@ public class ConsoleUI {
     }
 
     private void manageGames() {
-        String gameMenu = "Game Management:\n1. Create Game\n2. Update Game\n3. View All Games";
-        int choice = getMenuSelection(gameMenu, 3);
+        String gameMenu = "Game Management:\n1. Create Game\n2. Update Game\n3. View All Games\n4. View Individual Game";
+        int choice = getMenuSelection(gameMenu, 4);
 
         switch (choice) {
             case 1:
@@ -186,6 +194,9 @@ public class ConsoleUI {
                 break;
             case 3:
                 viewAllGames();
+                break;
+            case 4:
+                viewGame();
                 break;
             default:
                 System.out.println("Invalid option.");
@@ -286,6 +297,17 @@ public class ConsoleUI {
         }
     }
 
+    private void viewTeam() {
+        Long teamId = TeamValidator.getTeamId(scanner);
+        Team team = teamService.getTeam(teamId);
+
+        if (team != null) {
+            team.showDetails();
+        } else {
+            System.out.println("Team with ID " + teamId + " not found.");
+        }
+    }
+
     private void createTournament() {
         Long gameId = GameValidator.getGameId(scanner);  // Get game ID
 
@@ -377,6 +399,17 @@ public class ConsoleUI {
         }
     }
 
+    private void viewTournament() {
+        Long tournamentId = TournamentValidator.getTournamentId(scanner);
+        Tournament tournament = tournamentService.getTournament(tournamentId);
+
+        if (tournament != null) {
+            tournament.showDetails();
+        } else {
+            System.out.println("Tournament with ID " + tournamentId + " not found.");
+        }
+    }
+
     private void createGame() {
         String name = GameValidator.getGameName(scanner);
         int difficulty = GameValidator.getDifficulty(scanner);
@@ -405,6 +438,17 @@ public class ConsoleUI {
                 game.showDetails();
                 System.out.println("-----------");
             }
+        }
+    }
+
+    private void viewGame() {
+        Long gameId = GameValidator.getGameId(scanner);
+        Game game = gameService.getGame(gameId);
+
+        if (game != null) {
+            game.showDetails();
+        } else {
+            System.out.println("Game with ID " + gameId + " not found.");
         }
     }
 }
