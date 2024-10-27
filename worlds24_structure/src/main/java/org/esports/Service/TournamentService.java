@@ -1,6 +1,7 @@
 package org.esports.Service;
 
 import org.esports.Model.Enum.TournamentStatus;
+import org.esports.Model.Game;
 import org.esports.Model.Team;
 import org.esports.Model.Tournament;
 import org.esports.Repository.Interface.TournamentRepository;
@@ -18,7 +19,9 @@ public class TournamentService {
         this.tournament = tournament;
     }
 
-    public boolean addTournament(String title, LocalDate startDate, LocalDate endDate, int numberOfSpectators, int estimatedDuration, int breakBetweenGames, int ceremonyTime, TournamentStatus status) {
+    public boolean addTournament(String title, LocalDate startDate, LocalDate endDate, int numberOfSpectators,
+                                 int estimatedDuration, int breakBetweenGames, int ceremonyTime,
+                                 TournamentStatus status, Game game) {
         tournament.setTitle(title);
         tournament.setStartDate(startDate);
         tournament.setEndDate(endDate);
@@ -27,8 +30,11 @@ public class TournamentService {
         tournament.setBreakBetweenGames(breakBetweenGames);
         tournament.setCeremonyTime(ceremonyTime);
         tournament.setStatus(status);
+        tournament.setGame(game);
+
         return tournamentRepository.addTournament(tournament);
     }
+
 
     public boolean updateTournament(Long tournamentId, String title, LocalDate startDate, LocalDate endDate, int numberOfSpectators, int estimatedDuration, int breakBetweenGames, int ceremonyTime, TournamentStatus status) {
         Tournament existingTournament = tournamentRepository.getTournament(tournamentId);

@@ -1,4 +1,5 @@
 import org.esports.Model.Enum.TournamentStatus;
+import org.esports.Model.Game;
 import org.esports.Model.Team;
 import org.esports.Model.Tournament;
 import org.esports.Repository.Interface.TournamentRepository;
@@ -36,22 +37,29 @@ public class TournamentServiceTest {
 
     @Test
     public void testAddTournament() {
-        String title = "Championship Tournament";
-        LocalDate startDate = LocalDate.of(2024, 5, 10);
-        LocalDate endDate = LocalDate.of(2024, 5, 20);
+        String title = "Champions League";
+        LocalDate startDate = LocalDate.of(2025, 5, 1);
+        LocalDate endDate = LocalDate.of(2025, 5, 15);
         int numberOfSpectators = 5000;
         int estimatedDuration = 120;
-        int breakBetweenGames = 15;
+        int breakBetweenGames = 10;
         int ceremonyTime = 30;
         TournamentStatus status = TournamentStatus.PLANNED;
 
-        when(tournamentRepository.addTournament(tournament)).thenReturn(true);
+        Game game = new Game();
+        game.setId(1L);
+        game.setName("LeagueOfLegends");
 
-        boolean result = tournamentService.addTournament(title, startDate, endDate, numberOfSpectators, estimatedDuration, breakBetweenGames, ceremonyTime, status);
+        when(tournamentRepository.addTournament(any(Tournament.class))).thenReturn(true);
+
+        boolean result = tournamentService.addTournament(title, startDate, endDate, numberOfSpectators,
+                estimatedDuration, breakBetweenGames, ceremonyTime,
+                status, game);
 
         assertTrue(result);
         verify(tournamentRepository, times(1)).addTournament(tournament);
     }
+
 
     @Test
     public void testUpdateTournament() {

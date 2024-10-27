@@ -5,6 +5,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import org.esports.Model.Enum.TournamentStatus;
+import org.esports.Model.Game;
 import org.esports.Model.Player;
 import org.esports.Model.Team;
 import org.esports.Service.GameService;
@@ -238,6 +239,14 @@ public class ConsoleUI {
     }
 
     private void createTournament() {
+        Long gameId = GameValidator.getGameId(scanner);  // Get game ID
+
+        Game game = gameService.getGame(gameId);
+
+        if (game == null) {
+            System.out.println("Game with the specified ID does not exist.");
+            return;
+        }
         String title = TournamentValidator.getTournamentTitle(scanner);
         LocalDate startDate = TournamentValidator.getTournamentStartDate(scanner);
         LocalDate endDate = TournamentValidator.getTournamentEndDate(scanner);
@@ -247,9 +256,13 @@ public class ConsoleUI {
         int ceremonyTime = TournamentValidator.getCeremonyTime(scanner);
         TournamentStatus status = TournamentValidator.getTournamentStatus(scanner);
 
-        boolean success = tournamentService.addTournament(title, startDate, endDate, numberOfSpectators, estimatedDuration, breakBetweenGames, ceremonyTime, status);
+        boolean success = tournamentService.addTournament(
+                title, startDate, endDate, numberOfSpectators, estimatedDuration,
+                breakBetweenGames, ceremonyTime, status, game
+        );
         System.out.println(success ? "Tournament created successfully." : "Tournament creation failed.");
     }
+
 
     private void updateTournament() {
         Long tournamentId = TournamentValidator.getTournamentId(scanner);
