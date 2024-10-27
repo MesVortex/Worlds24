@@ -53,7 +53,7 @@ public class Tournament {
 
     @ManyToOne
     @JoinColumn(name = "gameID")
-//    @NotNull(message = "game cannot be null")
+    @NotNull(message = "game cannot be null")
     private Game game;
 
     public Tournament() {
@@ -145,6 +145,28 @@ public class Tournament {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public void showDetails() {
+        System.out.println("Tournament ID: " + id);
+        System.out.println("Title: " + title);
+        System.out.println("Game: " + game.getName());
+        System.out.println("Start Date: " + startDate);
+        System.out.println("End Date: " + endDate);
+        System.out.println("Number of Spectators: " + numberOfSpectators);
+        System.out.println("Estimated Duration: " + estimatedDuration + " minutes");
+        System.out.println("Break Between Games: " + breakBetweenGames + " minutes");
+        System.out.println("Ceremony Time: " + ceremonyTime + " minutes");
+        System.out.println("Status: " + status);
+        System.out.println("Teams:");
+
+        if (teams != null && !teams.isEmpty()) {
+            for (Team team : teams) {
+                System.out.println(" - Team Name: " + team.getName() + " (Ranking: " + team.getRanking() + ")");
+            }
+        } else {
+            System.out.println(" No teams assigned to this tournament.");
+        }
     }
 
     @Override

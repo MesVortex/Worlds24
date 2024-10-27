@@ -9,6 +9,7 @@ import org.esports.Model.Enum.TournamentStatus;
 import org.esports.Model.Game;
 import org.esports.Model.Player;
 import org.esports.Model.Team;
+import org.esports.Model.Tournament;
 import org.esports.Service.GameService;
 import org.esports.Service.PlayerService;
 import org.esports.Service.TeamService;
@@ -142,8 +143,9 @@ public class ConsoleUI {
                 "2. Update Tournament\n" +
                 "3. Add Team to Tournament\n" +
                 "4. Remove Team from Tournament\n" +
-                "5. Calculate Estimated Duration";
-        int choice = getMenuSelection(tournamentMenu, 5);
+                "5. Calculate Estimated Duration\n" +
+                "6. View All Tournaments";
+        int choice = getMenuSelection(tournamentMenu, 6);
 
         switch (choice) {
             case 1:
@@ -161,12 +163,14 @@ public class ConsoleUI {
             case 5:
                 calculateEstimatedDuration();
                 break;
+            case 6:
+                viewAllTournaments();
+                break;
             default:
                 System.out.println("Invalid option.");
                 break;
         }
     }
-
 
 
     private void manageGames() {
@@ -357,7 +361,21 @@ public class ConsoleUI {
         int hours = estimatedDurationMinutes / 60;
         int minutes = estimatedDurationMinutes % 60;
 
-        System.out.println("Estimated Tournament Duration: " + estimatedDurationMinutes + " minutes (" + hours + " hours and " + minutes + " minutes).");    }
+        System.out.println("Estimated Tournament Duration: " + estimatedDurationMinutes + " minutes (" + hours + " hours and " + minutes + " minutes).");
+    }
+
+    private void viewAllTournaments() {
+        List<Tournament> tournaments = tournamentService.getTournaments();
+        if (tournaments.isEmpty()) {
+            System.out.println("No tournaments available.");
+        } else {
+            for (Tournament tournament : tournaments) {
+                tournament.showDetails();
+                System.out.println("-----------");
+            }
+        }
+    }
+
 
     private void createGame() {
         String name = GameValidator.getGameName(scanner);
