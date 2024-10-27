@@ -91,4 +91,14 @@ public class TournamentRepositoryImpl implements TournamentRepository {
             em.close();
         }
     }
+
+    @Override
+    public int calculateEstimatedDuration(Long tournamentId) {
+        Tournament tournament = getTournament(tournamentId);
+        int numberOfTeams = tournament.getTeams().size();
+        int averageMatchDuration = tournament.getGame().getAverageDuration();
+        int breakBetweenGames = tournament.getBreakBetweenGames();
+
+        return (numberOfTeams * averageMatchDuration) + breakBetweenGames;
+    }
 }

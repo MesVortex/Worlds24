@@ -9,4 +9,5 @@ public interface TournamentRepository {
     boolean deleteTournament(Long id);
     Tournament getTournament(Long id);
     List<Tournament> getTournaments();
+    int calculateEstimatedDuration(Long tournamentId);
 }

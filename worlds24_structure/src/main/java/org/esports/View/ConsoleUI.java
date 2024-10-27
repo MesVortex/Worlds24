@@ -126,8 +126,9 @@ public class ConsoleUI {
                 "1. Create Tournament\n" +
                 "2. Update Tournament\n" +
                 "3. Add Team to Tournament\n" +
-                "4. Remove Team from Tournament";
-        int choice = getMenuSelection(tournamentMenu, 4);
+                "4. Remove Team from Tournament\n" +
+                "5. Calculate Estimated Duration";
+        int choice = getMenuSelection(tournamentMenu, 5);
 
         switch (choice) {
             case 1:
@@ -142,11 +143,15 @@ public class ConsoleUI {
             case 4:
                 removeTeamFromTournament();
                 break;
+            case 5:
+                calculateEstimatedDuration();
+                break;
             default:
                 System.out.println("Invalid option.");
                 break;
         }
     }
+
 
 
     private void manageGames() {
@@ -305,9 +310,17 @@ public class ConsoleUI {
             return;
         }
 
-        boolean success = tournamentService.removeTeamFromTournament(tournamentId, team);  // Call the service method
+        boolean success = tournamentService.removeTeamFromTournament(tournamentId, team);
         System.out.println(success ? "Team removed from tournament successfully." : "Failed to remove team from tournament.");
     }
+
+    private void calculateEstimatedDuration() {
+        Long tournamentId = TournamentValidator.getTournamentId(scanner);
+        int estimatedDurationMinutes = tournamentService.getEstimatedDuration(tournamentId);
+        int hours = estimatedDurationMinutes / 60;
+        int minutes = estimatedDurationMinutes % 60;
+
+        System.out.println("Estimated Tournament Duration: " + estimatedDurationMinutes + " minutes (" + hours + " hours and " + minutes + " minutes).");    }
 
     private void createGame() {
         String name = GameValidator.getGameName(scanner);

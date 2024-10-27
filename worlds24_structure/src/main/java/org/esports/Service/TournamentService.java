@@ -93,4 +93,8 @@ public class TournamentService {
         return tournamentRepository.getTournaments();
     }
 
+    public int getEstimatedDuration(Long tournamentId) {
+        return tournamentRepository.calculateEstimatedDuration(tournamentId);
+    }
+
 }
