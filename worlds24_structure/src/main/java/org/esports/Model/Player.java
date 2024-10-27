@@ -67,6 +67,16 @@ public class Player {
         this.team = team;
     }
 
+    public void showDetails() {
+        System.out.println("Nickname: " + nickname);
+        System.out.println("Age: " + age);
+        if (team != null) {
+            System.out.println("Team: " + team.getName());
+        } else {
+            System.out.println("No team assigned.");
+        }
+    }
+
     @Override
     public String toString() {
         return "Player{" +

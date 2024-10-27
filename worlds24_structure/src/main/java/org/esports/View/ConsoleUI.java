@@ -79,8 +79,12 @@ public class ConsoleUI {
     }
 
     private void managePlayers() {
-        String playerMenu = "Player Management:\n1. Create Player\n2. Update Player\n3. Delete Player";
-        int choice = getMenuSelection(playerMenu, 3);
+        String playerMenu = "Player Management:\n" +
+                "1. Create Player\n" +
+                "2. Update Player\n" +
+                "3. Delete Player\n" +
+                "4. Show Player Details";
+        int choice = getMenuSelection(playerMenu, 4);
 
         switch (choice) {
             case 1:
@@ -92,11 +96,13 @@ public class ConsoleUI {
             case 3:
                 deletePlayer();
                 break;
+            case 4:
+                showPlayerDetails();
+                break;
             default:
                 System.out.println("Invalid option.");
         }
     }
-
 
     private void manageTeams() {
         String teamMenu = "Team Management:\n1. Create Team\n2. Update Team\n3. Add player to a team\n4. Remove player from a team";
@@ -194,6 +200,16 @@ public class ConsoleUI {
 
         boolean success = playerService.deletePlayer(playerId);
         System.out.println(success ? "Player deleted successfully." : "Player deletion failed. Player not found.");
+    }
+
+    private void showPlayerDetails() {
+        Long playerId = PlayerValidator.getPlayerId(scanner);
+        Player player = playerService.getPlayer(playerId);
+        if (player != null) {
+            player.showDetails();
+        } else {
+            System.out.println("Player not found.");
+        }
     }
 
     private void createTeam() {
