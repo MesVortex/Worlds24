@@ -72,6 +72,20 @@ public class Team {
         this.tournament = tournament;
     }
 
+    public void showDetails() {
+        System.out.println("Team ID: " + id);
+        System.out.println("Name: " + name);
+        System.out.println("Ranking: " + ranking);
+        System.out.println("Players:");
+        if (players != null && !players.isEmpty()) {
+            for (Player player : players) {
+                System.out.println(" - " + player.getNickname() + " (ID: " + player.getId() + ", Age: " + player.getAge() + ")");
+            }
+        } else {
+            System.out.println(" No players in this team.");
+        }
+    }
+
     @Override
     public String toString() {
         return "Team{" +

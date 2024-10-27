@@ -2,6 +2,7 @@ package org.esports.View;
 
 import java.time.LocalDate;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import org.esports.Model.Enum.TournamentStatus;
@@ -105,8 +106,13 @@ public class ConsoleUI {
     }
 
     private void manageTeams() {
-        String teamMenu = "Team Management:\n1. Create Team\n2. Update Team\n3. Add player to a team\n4. Remove player from a team";
-        int choice = getMenuSelection(teamMenu, 4);
+        String teamMenu = "Team Management:\n" +
+                "1. Create Team\n" +
+                "2. Update Team\n" +
+                "3. Add player to a team\n" +
+                "4. Remove player from a team\n" +
+                "5. View All Teams";
+        int choice = getMenuSelection(teamMenu, 5);
 
         switch (choice) {
             case 1:
@@ -120,6 +126,9 @@ public class ConsoleUI {
                 break;
             case 4:
                 removePlayerFromTeam();
+                break;
+            case 5:
+                viewAllTeams();
                 break;
             default:
                 System.out.println("Invalid option.");
@@ -257,6 +266,18 @@ public class ConsoleUI {
 
         boolean success = teamService.removePlayerFromTeam(teamId, player);
         System.out.println(success ? "Player removed from team successfully." : "Failed to remove player from team.");
+    }
+
+    private void viewAllTeams() {
+        List<Team> teams = teamService.getTeams();
+        if (teams.isEmpty()) {
+            System.out.println("No teams available.");
+        } else {
+            for (Team team : teams) {
+                team.showDetails();
+                System.out.println("-----------");
+            }
+        }
     }
 
     private void createTournament() {
