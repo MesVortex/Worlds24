@@ -10,14 +10,8 @@ import org.esports.Model.Game;
 import org.esports.Model.Player;
 import org.esports.Model.Team;
 import org.esports.Model.Tournament;
-import org.esports.Service.GameService;
-import org.esports.Service.PlayerService;
-import org.esports.Service.TeamService;
-import org.esports.Service.TournamentService;
-import org.esports.Utility.GameValidator;
-import org.esports.Utility.PlayerValidator;
-import org.esports.Utility.TeamValidator;
-import org.esports.Utility.TournamentValidator;
+import org.esports.Service.*;
+import org.esports.Utility.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,13 +22,15 @@ public class ConsoleUI {
     private final PlayerService playerService;
     private final TeamService teamService;
     private final TournamentService tournamentService;
+    private final CommentService commentService;
     private final Scanner scanner = new Scanner(System.in);
 
-    public ConsoleUI(GameService gameService, PlayerService playerService, TeamService teamService, TournamentService tournamentService) {
+    public ConsoleUI(GameService gameService, PlayerService playerService, TeamService teamService, TournamentService tournamentService, CommentService commentService) {
         this.gameService = gameService;
         this.playerService = playerService;
         this.teamService = teamService;
         this.tournamentService = tournamentService;
+        this.commentService = commentService;
     }
 
     private int getMenuSelection(String prompt, int max) {
@@ -158,8 +154,11 @@ public class ConsoleUI {
                 "4. Remove Team from Tournament\n" +
                 "5. Calculate Estimated Duration\n" +
                 "6. View All Tournaments\n" +
-                "7. View Individual Tournament";
-        int choice = getMenuSelection(tournamentMenu, 7);
+                "7. add comment to tournament\n" +
+                "8. View Individual Tournament\n" +
+                "9. view tournaments with comments\n" +
+                "10. view tournaments with no comments";
+        int choice = getMenuSelection(tournamentMenu, 10);
 
         switch (choice) {
             case 1:
@@ -181,7 +180,16 @@ public class ConsoleUI {
                 viewAllTournaments();
                 break;
             case 7:
+                addComment();
+                break;
+            case 8:
                 viewTournament();
+                break;
+            case 9:
+                viewTournamentsWithComments();
+                break;
+            case 10:
+                viewTournamentsWithNoComments();
                 break;
             default:
                 logger.warn("Invalid option.");
@@ -420,6 +428,30 @@ public class ConsoleUI {
         }
     }
 
+    private void viewTournamentsWithComments() {
+        List<Tournament> tournaments = tournamentService.getTournamentsWithComments();
+        if (tournaments.isEmpty()) {
+            logger.info("No tournaments available.");
+        } else {
+            for (Tournament tournament : tournaments) {
+                tournament.showDetails();
+                logger.info("-----------");
+            }
+        }
+    }
+
+    private void viewTournamentsWithNoComments() {
+        List<Tournament> tournaments = tournamentService.getTournamentsWithNoComments();
+        if (tournaments.isEmpty()) {
+            logger.info("No tournaments available.");
+        } else {
+            for (Tournament tournament : tournaments) {
+                tournament.showDetails();
+                logger.info("-----------");
+            }
+        }
+    }
+
     private void viewTournament() {
         Long tournamentId = TournamentValidator.getTournamentId(scanner);
         Tournament tournament = tournamentService.getTournament(tournamentId);
@@ -428,6 +460,21 @@ public class ConsoleUI {
             tournament.showDetails();
         } else {
             logger.warn("Tournament with ID {} not found.", tournamentId);
+        }
+    }
+    private void addComment() {
+        Long tournamentId = TournamentValidator.getTournamentId(scanner);
+        scanner.nextLine();
+        Tournament tournament = tournamentService.getTournament(tournamentId);
+        if (tournament == null) {
+            logger.warn("Tournament with ID {} not found.", tournamentId);
+        }else{
+            String comment = CommentValidator.getCommentContent(scanner);
+            if(comment != null){
+                if(commentService.addComment(comment, tournament)){
+                    logger.info("Comment added.");
+                }
+            }
         }
     }
 

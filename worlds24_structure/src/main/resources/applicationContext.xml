@@ -50,8 +50,12 @@
     <bean id="game" class="org.esports.Model.Game"/>
     <bean id="team" class="org.esports.Model.Team"/>
     <bean id="tournament" class="org.esports.Model.Tournament"/>
+    <bean id="comment" class="org.esports.Model.Comment">
+        <property name="maximumLength" value="10"/>
+    </bean>
 
-<!--    Utility beans-->
+
+    <!--    Utility beans-->
     <bean id="jpaUtil" class="org.esports.Utility.JPAUtil">
         <constructor-arg ref="entityManagerFactory"/>
     </bean>
@@ -72,6 +76,9 @@
     <bean id="tournamentRepositoryExtension" class="org.esports.Repository.Impl.TournamentRepositoryExtension">
         <constructor-arg ref="jpaUtil"/>
     </bean>
+    <bean id="commentRepository" class="org.esports.Repository.Impl.CommentRepositoryImpl">
+        <constructor-arg ref="jpaUtil"/>
+    </bean>
 
     <!-- Service beans -->
     <bean id="playerService" class="org.esports.Service.PlayerService">
@@ -87,8 +94,12 @@
         <constructor-arg ref="team" />
     </bean>
     <bean id="tournamentService" class="org.esports.Service.TournamentService">
-        <constructor-arg ref="tournamentRepositoryExtension"/>
+        <constructor-arg ref="tournamentRepository"/>
         <constructor-arg ref="tournament" />
+    </bean>
+    <bean id="commentService" class="org.esports.Service.CommentService">
+        <constructor-arg ref="commentRepository"/>
+        <constructor-arg ref="comment" />
     </bean>
 
     <!-- View beans -->
@@ -97,5 +108,10 @@
         <constructor-arg ref="playerService"/>
         <constructor-arg ref="teamService"/>
         <constructor-arg ref="tournamentService"/>
+        <constructor-arg ref="commentService"/>
+    </bean>
+
+    <bean id="commentValidator" class="org.esports.Utility.CommentValidator">
+        <constructor-arg ref="comment" />
     </bean>
 </beans>

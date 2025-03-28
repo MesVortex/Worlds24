@@ -9,6 +9,8 @@ import javax.validation.constraints.FutureOrPresent;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,10 +38,14 @@ public class Tournament {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
+    @OneToMany(mappedBy = "tournament",cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.EAGER)
+    private List<Comment> comments;
+
     @Column(name = "number_of_spectators")
     private int numberOfSpectators;
 
-    @OneToMany(mappedBy = "tournament", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "tournament", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Team> teams;
 
     @Column(name = "estimated_duration")
@@ -61,6 +67,14 @@ public class Tournament {
     private Game game;
 
     public Tournament() {
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     public long getId() {

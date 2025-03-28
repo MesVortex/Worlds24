@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TournamentService {
     private static final Logger logger = LoggerFactory.getLogger(TournamentService.class);
@@ -95,6 +96,14 @@ public class TournamentService {
 
     public List<Tournament> getTournaments() {
         return tournamentRepository.getTournaments();
+    }
+
+    public List<Tournament> getTournamentsWithComments() {
+        return tournamentRepository.getTournaments().stream().filter(tour -> !tour.getComments().isEmpty()).collect(Collectors.toList());
+    }
+
+    public List<Tournament> getTournamentsWithNoComments() {
+        return tournamentRepository.getTournaments().stream().filter(tour -> tour.getComments().isEmpty()).collect(Collectors.toList());
     }
 
     public int getEstimatedDuration(Long tournamentId) {
